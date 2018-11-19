@@ -124,8 +124,10 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 		echo "<option value=\"do_not_trade\"{{#is auto_type value=\"do_not_trade\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - Do Not Trade', 'caldera-forms-civicrm' ) . "</option>";
 		// Is Opt Out
 		echo "<option value=\"is_opt_out\"{{#is auto_type value=\"is_opt_out\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - No Bulk Emails (User Opt Out)', 'caldera-forms-civicrm' ) . "</option>";
-		// Country
-		echo "<option value=\"country_id\"{{#is auto_type value=\"country_id\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - Country', 'caldera-forms-civicrm' ) . "</option>";
+		// Country (ID)
+		echo "<option value=\"country_id\"{{#is auto_type value=\"country_id\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - Country (ID)', 'caldera-forms-civicrm' ) . "</option>";
+    // Country (ISO Code)
+    echo "<option value=\"country_iso_code\"{{#is auto_type value=\"country_iso_code\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - Country (ISO Code)', 'caldera-forms-civicrm' ) . "</option>";
 		// State/Provine
 		echo "<option value=\"state_province_id\"{{#is auto_type value=\"state_province_id\"}} selected=\"selected\"{{/is}}>" . __( 'CiviCRM - State/Province', 'caldera-forms-civicrm' ) . "</option>";
 		// Address Location Type
@@ -302,7 +304,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 					}
 					break;
 
-				// Country
+				// Country (ID)
 				case 'country_id':
 					$country_id = civicrm_api3( 'Country', 'get', [
 						'sequential' => 1,
@@ -315,6 +317,20 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 							];
 					}
 					break;
+
+        // Country (ISO Code)
+        case 'country_iso_code':
+          $country_id = civicrm_api3( 'Country', 'get', [
+            'sequential' => 1,
+            'options' => [ 'limit' => 0 ],
+          ] );
+          foreach ( $country_id['values'] as $key => $value ) {
+            $field['config']['option'][$value['id']] = [
+              'value' => $value['iso_code'],
+              'label' => $value['name']
+            ];
+          }
+          break;
 
 				// State/Province
 				case 'state_province_id':
