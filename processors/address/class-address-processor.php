@@ -90,10 +90,14 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 		if ( ! empty( $transient->contacts->{$this->contact_link} ) ) {
 
 			try {
-				$address = civicrm_api3( 'Address', 'getsingle', [
-					'contact_id' => $transient->contacts->{$this->contact_link},
-					'location_type_id' => $config['location_type_id'],
-				] );
+
+        $addressParams = $this->getAddressParams($config);
+
+        if (!empty($addressParams)) {
+          $addressParams['contact_id'] = $transient->contacts->{$this->contact_link};
+          $address = civicrm_api3( 'Address', 'getsingle', $addressParams);
+        }
+        
 			} catch ( CiviCRM_API3_Exception $e ) {
 				// Ignore if none found
 			}
@@ -132,6 +136,32 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 		}
 	}
 
+  /**
+   * Get address params based on configurations.
+   * @param $config
+   */
+	private function getAddressParams($config) {
+    $addressParams = [];
+    if ($config['location_type_id']) {
+      $addressParams['location_type_id'] = $config['location_type_id'];
+    }
+    if ($config['is_primary_address'] == '1') {
+      $addressParams['is_primary'] = 1;
+    }
+    if ($config['is_primary_address'] == '0') {
+      $addressParams['is_primary'] = 0;
+    }
+
+    if ($config['is_billing_address'] == '1') {
+      $addressParams['is_billing'] = 1;
+    }
+    if ($config['is_billing_address'] == '0') {
+      $addressParams['is_billing'] = 0;
+    }
+
+    return $addressParams;
+  }
+
 	/**
 	 * Autopopulates Form with Civi data
 	 *
@@ -158,10 +188,12 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 				if ( isset( $transient->contacts->{$contact_link} ) ) {
 					try {
 
-						$address = civicrm_api3( 'Address', 'getsingle', [
-							'contact_id' => $transient->contacts->{$contact_link},
-							'location_type_id' => $pr_id['config']['location_type_id'],
-						] );
+					  $addressParams = $this->getAddressParams($pr_id['config']);
+
+            if (!empty($addressParams)) {
+              $addressParams['contact_id'] = $transient->contacts->{$contact_link};
+              $address = civicrm_api3( 'Address', 'getsingle', $addressParams);
+            }
 
 					} catch ( CiviCRM_API3_Exception $e ) {
 						// Ignore if we have more than one address with same location type						
