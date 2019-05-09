@@ -43,24 +43,15 @@ $fields = caldera_forms_civicrm()->processors->processors['address']->fields;
 		</select>
 	</div>
 </div>
-<div id="{{_id}}_is_primary_address" class="caldera-config-group">
-    <label><?php echo __( 'Is Primary ?', 'caldera-forms-civicrm' ); ?></label>
+<div id="{{_id}}_is_primary_address" class="caldera-config-group caldera-config-group-full">
     <div class="caldera-config-field">
-        <select class="block-input field-config" name="{{_name}}[is_primary_address]">
-            <option value="" {{#is contact_sub_type value=""}}selected="selected"{{/is}}></option>
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-        </select>
+        <label><input id="{{_id}}_is_primary_address" type="checkbox" name="{{_name}}[is_primary_address]" value="1" {{#if is_primary_address}}checked="checked"{{/if}}><?php _e( 'Primary location for this contact.', 'caldera-forms-civicrm' ); ?></label>
     </div>
 </div>
-<div id="{{_id}}_is_billing_address" class="caldera-config-group">
-    <label><?php echo __( 'Is Billing ?', 'caldera-forms-civicrm' ); ?></label>
+<div id="{{_id}}_is_billing_address" class="caldera-config-group caldera-config-group-full">
     <div class="caldera-config-field">
-        <select class="block-input field-config" name="{{_name}}[is_billing_address]">
-            <option value="" {{#is contact_sub_type value=""}}selected="selected"{{/is}}></option>
-            <option value="1">Yes</option>
-            <option value="0">No</option>
-        </select>
+        <label><input id="{{_id}}_is_billing_address" type="checkbox" name="{{_name}}[is_billing_address]" value="1" {{#if is_billing_address}}checked="checked"{{/if}}><?php _e( 'Billing location for this contact.', 'caldera-forms-civicrm' ); ?></label>
+        <br><p class="description"><?php _e( 'Prefill the address fields on form based on selected location type.' ) ?></p>
     </div>
 </div>
 
