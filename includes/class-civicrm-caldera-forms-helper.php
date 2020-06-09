@@ -771,6 +771,7 @@ class CiviCRM_Caldera_Forms_Helper {
 			'is_active' => 1,
 			'is_reserved' => 0,
 			'options' => [ 'limit' => 0 ],
+            'domain_id' => CRM_Core_Config::domainID(),
 			'api.PriceField.get' => [
 				'sequential' => 0,
 				'price_set_id' => "\$value.id",
