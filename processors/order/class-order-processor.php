@@ -129,16 +129,12 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 
 		// Get form values
 		$form_values = $this->plugin->helper->map_fields_to_processor( $config, $form, $form_values );
-		// Cause when payment processed and back to this form, the pre_processor will run again
-		// So we don't want to create duplicated contribution
-		if ( ! empty( $transdata['processed_meta'] )
-		) {
-			// may need a better way to get the processed meta
-			$saved_data = $transdata['processed_meta'];
-			$saved_data = array_shift( $saved_data );
-			$saved_data = $saved_data[ $config['processor_id'] ];
-			if(!empty($saved_data['order_id'])) {
-				$form_values['id'] = array_shift($saved_data['order_id']);
+		// When payment processed and back to this form, the pre_processor will run again
+		// Retrieve the existing order ID to avoid creating a duplicated contribution
+		if(!empty($transdata['civicrm-orders'][$config['processor_id']])) {
+			$saved_data = $transdata['civicrm-orders'][$config['processor_id']];
+			if(!empty($saved_data['id'])) {
+				$form_values['id'] = $saved_data['id'];
 			}
 		}
 
@@ -218,6 +214,8 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 				// save order data in transient
 				$transient->orders->{$config['processor_id']}->params = $this->order;
 				$this->plugin->transient->save( $transient->ID, $transient );
+				
+				$transdata['civicrm-orders'][$config['processor_id']] = $this->order;
 			}
 
 		} catch ( CiviCRM_API3_Exception $e ) {
