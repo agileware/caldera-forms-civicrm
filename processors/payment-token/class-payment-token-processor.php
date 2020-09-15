@@ -85,7 +85,7 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 		}
 
 		try {
-			$token = civicrm_api3( 'PaymentToken',
+			$token = $this->plugin->api->wrapper( 'PaymentToken',
 				'getsingle',
 				[
 					'id' => $form_values['id'],
@@ -107,7 +107,7 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 				return NULL;
 			}
 			try{
-				$result = civicrm_api3( 'PaymentToken',
+				$result = $this->plugin->api->wrapper( 'PaymentToken',
 					'delete',
 					[
 						'id' => $form_values['id'],
@@ -140,7 +140,7 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 			}
 			// dedupe based on the required fields
 			try {
-				$result = civicrm_api3( 'PaymentToken',
+				$result = $this->plugin->api->wrapper( 'PaymentToken',
 					'get',
 					[
 						'payment_processor_id' => $form_values['payment_processor_id'],
@@ -156,7 +156,7 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 		}
 
 		try {
-			$result = civicrm_api3( 'PaymentToken', 'create', $form_values );
+			$result = $this->plugin->api->wrapper( 'PaymentToken', 'create', $form_values );
 			// Pass magic tags value
 			$token = array_shift( $result['values'] );
 
@@ -197,7 +197,7 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 			return $field;
 		}
 		try {
-			$result = civicrm_api3( 'PaymentToken',
+			$result = $this->plugin->api->wrapper( 'PaymentToken',
 				'get',
 				[
 					'contact_id' => $contactID,

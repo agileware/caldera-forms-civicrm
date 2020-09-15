@@ -1,9 +1,9 @@
 <?php
-	$websiteFields = civicrm_api3( 'Website', 'getfields', [
+	$websiteFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Website', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$websiteType = civicrm_api3( 'Website', 'getoptions', [
+	$websiteType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Website', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'website_type_id',
 	] );

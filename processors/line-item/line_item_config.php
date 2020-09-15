@@ -6,14 +6,14 @@ $entities = [
 	'civicrm_contribution' => __( 'CiviCRM Contribution', 'cf-civicrm' ),
 ];
 
-$membership_types = civicrm_api3( 'MembershipType', 'get', [
+$membership_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'MembershipType', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'visibility' => 'Public',
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$fields = civicrm_api3( 'LineItem', 'getfields', [
+$fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'LineItem', 'getfields', [
 	'api_action' => 'create',
 ] );
 

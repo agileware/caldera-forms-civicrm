@@ -114,7 +114,7 @@ class CiviCRM_Caldera_Forms_Activity_Processor {
 			}
 
 			try {
-				$activity = civicrm_api3( 'Activity', 'create', $form_values );
+				$activity = $this->plugin->api->wrapper( 'Activity', 'create', $form_values );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 				$transdata['error'] = TRUE;

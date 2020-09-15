@@ -128,7 +128,7 @@ class CiviCRM_Caldera_Forms_Membership_Processor {
 
 		// is member?
 		try {
-			$is_member = civicrm_api3( 'Membership', 'getsingle', [
+			$is_member = $this->plugin->api->wrapper( 'Membership', 'getsingle', [
 				'contact_id' => $transient->contacts->{$this->contact_link},
 				'membership_type_id' => $form_values['membership_type_id'],
 			] );
@@ -201,7 +201,7 @@ class CiviCRM_Caldera_Forms_Membership_Processor {
 			if( ! $config['is_monetary'] ) {
 				unset( $form_values['is_price_field_based'] );
 				try {
-					$create_member = civicrm_api3( 'Membership', 'create', $form_values );
+					$create_member = $this->plugin->api->wrapper( 'Membership', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -257,7 +257,7 @@ class CiviCRM_Caldera_Forms_Membership_Processor {
 
 					try {
 
-						$is_member = civicrm_api3( 'Membership', 'get', [
+						$is_member = $this->plugin->api->wrapper( 'Membership', 'get', [
 							'sequential' => 1,
 							'is_test' => 0,
 							'status_id' => [ 'IN' => $membership_statuses ? $membership_statuses : [ 'New', 'Current', 'Grace' ] ],
@@ -323,7 +323,7 @@ class CiviCRM_Caldera_Forms_Membership_Processor {
 		if ( ! empty( $this->membership_statuses_current ) ) return $this->membership_statuses_current;
 
 		try {
-			$statuses = civicrm_api3( 'MembershipStatus', 'get', [
+			$statuses = $this->plugin->api->wrapper( 'MembershipStatus', 'get', [
 				'sequential' => 1,
 				'return' => [ 'name' ],
 				'is_current_member' => 1,

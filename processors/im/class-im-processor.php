@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_Im_Processor {
 
 			try {
 
-				$im = civicrm_api3( 'Im', 'getsingle', [
+				$im = $this->plugin->api->wrapper( 'Im', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['location_type_id'],
@@ -123,7 +123,7 @@ class CiviCRM_Caldera_Forms_Im_Processor {
 				}
 
 				try {
-					$create_im = civicrm_api3( 'Im', 'create', $form_values );
+					$create_im = $this->plugin->api->wrapper( 'Im', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -158,7 +158,7 @@ class CiviCRM_Caldera_Forms_Im_Processor {
 				if ( isset( $transient->contacts->{$contact_link} ) ) {
 					try {
 
-						$contact_im = civicrm_api3( 'Im', 'getsingle', [
+						$contact_im = $this->plugin->api->wrapper( 'Im', 'getsingle', [
 							'sequential' => 1,
 							'contact_id' => $transient->contacts->{$contact_link},
 							'location_type_id' => $pr_id['config']['location_type_id'],

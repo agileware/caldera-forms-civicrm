@@ -1,38 +1,38 @@
 <?php
 
-$financial_types = civicrm_api3( 'FinancialType', 'get', [
+$financial_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'FinancialType', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$contribution_status = civicrm_api3( 'Contribution', 'getoptions', [
+$contribution_status = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contribution', 'getoptions', [
   'sequential' => 1,
   'field' => 'contribution_status_id',
 ] );
 
-$payment_instruments = civicrm_api3( 'Contribution', 'getoptions', [
+$payment_instruments = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contribution', 'getoptions', [
 	'field' => 'payment_instrument_id',
 ] );
 
-$currencies = civicrm_api3( 'Contribution', 'getoptions', [
+$currencies = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contribution', 'getoptions', [
 	'field' => 'currency',
 ] );
 
-$contribution_page = civicrm_api3( 'ContributionPage', 'get', [
+$contribution_page = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContributionPage', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'return' => [ 'title' ],
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$payment_processor = civicrm_api3( 'PaymentProcessor', 'get', [
+$payment_processor = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'PaymentProcessor', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'is_test' => 0,
 ] );
 
-$campaigns = civicrm_api3( 'Campaign', 'get', [
+$campaigns = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Campaign', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],

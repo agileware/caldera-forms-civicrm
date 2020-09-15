@@ -67,12 +67,12 @@ class CiviCRM_Caldera_forms_Complete_transaction_Processor {
 		$form_values = array_merge( $config, $form_values );
 
 		if ( $form_values['contribution_status'] ) {
-			$contribution = civicrm_api3('Contribution', 'completetransaction', [
+			$contribution = $this->plugin->api->wrapper('Contribution', 'completetransaction', [
 				'id' => $form_values['contribution_id'],
 				'trxn_id' => $form_values['trxn_id']
 			]);
 		} else {
-			$contribution = civicrm_api3( 'Contribution', 'create', [
+			$contribution = $this->plugin->api->wrapper( 'Contribution', 'create', [
 				'id' => $form_values['contribution_id'],
 				'contribution_status_id' => "Failed",
 				'trxn_id' => $form_values['trxn_id']
@@ -119,17 +119,17 @@ class CiviCRM_Caldera_forms_Complete_transaction_Processor {
 		$contributionRecur['payment_token_id'] = $this->maybeSaveCustomerToken( $form_values, $baseContribution );
 
 		// create recurring contribution
-		$contributionRecur_result = civicrm_api3( 'ContributionRecur', 'create', $contributionRecur );
+		$contributionRecur_result = $this->plugin->api->wrapper( 'ContributionRecur', 'create', $contributionRecur );
 		$contributionRecur_result = array_shift( $contributionRecur_result['values'] );
 		// calculate the next contribution date
 		$next_sched = date('Y-m-d 00:00:00',
 			strtotime("+{$contributionRecur_result['frequency_interval']} " .
 			          "{$contributionRecur_result['frequency_unit']}s"));
 		$contributionRecur_result['next_sched_contribution_date'] = $next_sched;
-		$contributionRecur_result = civicrm_api3( 'ContributionRecur', 'create', $contributionRecur_result );
+		$contributionRecur_result = $this->plugin->api->wrapper( 'ContributionRecur', 'create', $contributionRecur_result );
 		// update the base contribution
 		$baseContribution['contribution_recur_id'] = $contributionRecur_result['id'];
-		civicrm_api3( 'Contribution', 'create', $baseContribution );
+		$this->plugin->api->wrapper( 'Contribution', 'create', $baseContribution );
 	}
 
 	/**
@@ -148,13 +148,13 @@ class CiviCRM_Caldera_forms_Complete_transaction_Processor {
 			return '';
 		}
 		// check if the id exist
-		$tokenResult = civicrm_api3('PaymentToken', 'get', [
+		$tokenResult = $this->plugin->api->wrapper('PaymentToken', 'get', [
 			'id' => $id
 		]);
 
 		if ( ! $tokenResult['count'] ) {
 			// create new token
-			$tokenResult = civicrm_api3( 'PaymentToken', 'create', [
+			$tokenResult = $this->plugin->api->wrapper( 'PaymentToken', 'create', [
 				'contact_id' => $contribution['contact_id'],
 				'payment_processor_id' => $form_values['payment_processor_id'],
 				'token' => $id

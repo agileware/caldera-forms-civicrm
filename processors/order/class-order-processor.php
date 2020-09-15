@@ -201,12 +201,12 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 
 		try {
 			if ( $form_values['id'] ) {
-				$create_order = civicrm_api3( 'Order', 'get', [
+				$create_order = $this->plugin->api->wrapper( 'Order', 'get', [
 					'id' => $form_values['id'],
 				] );
 
 			} else {
-				$create_order = civicrm_api3( 'Order', 'create', $form_values );
+				$create_order = $this->plugin->api->wrapper( 'Order', 'create', $form_values );
 			}
 
 			$this->order = ( $create_order['count'] && ! $create_order['is_error'] ) ? $create_order['values'][$create_order['id']] : false;
@@ -254,7 +254,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 				'trxn_id' => $config['trxn_id'],
 			];
 
-			civicrm_api3('Payment', 'create', $payment_params);
+			$this->plugin->api->wrapper('Payment', 'create', $payment_params);
 		}
 
 	}
@@ -276,7 +276,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		// preserve join dates
 		$this->preserve_membership_join_date( $form );
 
-		$line_items = civicrm_api3( 'LineItem', 'get', [
+		$line_items = $this->plugin->api->wrapper( 'LineItem', 'get', [
 			'contribution_id' => $this->order['id']
 		] );
 
@@ -543,7 +543,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 							// set oldest join date
 							$latest_membership['join_date'] = $oldest_membership['join_date'];
 							// update membership
-							$update_membership = civicrm_api3( 'Membership', 'create', $latest_membership );
+							$update_membership = $this->plugin->api->wrapper( 'Membership', 'create', $latest_membership );
 						}
 					}
 
@@ -682,7 +682,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 			$params['product_option'] = $transdata['data'][$config['product_id'] . '_option'];
 
 		try {
-			$premium = civicrm_api3( 'ContributionProduct', 'create', $params );
+			$premium = $this->plugin->api->wrapper( 'ContributionProduct', 'create', $params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			// log error
 		}
@@ -727,7 +727,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 			return $items;
 		}, [] );
 
-		$participants = civicrm_api3( 'Participant', 'get', [
+		$participants = $this->plugin->api->wrapper( 'Participant', 'get', [
 			'id' => [ 'IN' => $participant_ids ],
 			'options' => [ 'limit' => 0 ]
 		] );
@@ -762,7 +762,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 			if ( ! $participant ) return;
 
 			try {
-				$discount_track = civicrm_api3( 'DiscountTrack', 'create', [
+				$discount_track = $this->plugin->api->wrapper( 'DiscountTrack', 'create', [
 					'item_id' => $discount['id'],
 					'contact_id' => $order['contact_id'],
 					'contribution_id' => $order['id'],
@@ -810,7 +810,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 
 		if ( isset( $order['id'] ) && isset( $config['is_email_receipt'] ) ) {
 			try {
-				civicrm_api3( 'Contribution', 'sendconfirmation', [ 'id' => $order['id'] ] );
+				$this->plugin->api->wrapper( 'Contribution', 'sendconfirmation', [ 'id' => $order['id'] ] );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
 			}
@@ -827,7 +827,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	 */
 	public function get_option_by_label( $label ) {
 		try {
-			$option_value = civicrm_api3( 'OptionValue', 'getsingle', [
+			$option_value = $this->plugin->api->wrapper( 'OptionValue', 'getsingle', [
 				'label' => $label,
 			] );
 

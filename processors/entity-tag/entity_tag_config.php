@@ -1,6 +1,6 @@
 <?php
 
-$tagResult = $result = civicrm_api3( 'Tag', 'get', [
+$tagResult = $result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Tag', 'get', [
 	'sequential' => 1,
 	'used_for' => 'civicrm_contact',
 	'options' => [ 'limit' => 0 ],

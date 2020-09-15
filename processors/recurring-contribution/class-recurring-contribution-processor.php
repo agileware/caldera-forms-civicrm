@@ -95,7 +95,7 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 		$transient = $this->plugin->transient->get();
 
 		try {
-			$contribution = civicrm_api3( 'Contribution',
+			$contribution = $this->plugin->api->wrapper( 'Contribution',
 				'getsingle',
 				[
 					'id' => $form_values['contribution_id'],
@@ -142,7 +142,7 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 
 		// create recurring contribution
 		try {
-			$contributionRecur_result = civicrm_api3( 'ContributionRecur', 'create', $contributionRecur );
+			$contributionRecur_result = $this->plugin->api->wrapper( 'ContributionRecur', 'create', $contributionRecur );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			return;
 		}
@@ -150,7 +150,7 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 		// update the base contribution
 		$baseContribution['contribution_recur_id'] = $contributionRecur_result['id'];
 		try {
-			civicrm_api3( 'Contribution', 'create', [
+			$this->plugin->api->wrapper( 'Contribution', 'create', [
 				'id' => $baseContribution['id'],
 				'contribution_recur_id' => $contributionRecur_result['id'],
             ] );
@@ -172,7 +172,7 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 	 */
 	private function activate($id, $tokenID) {
 		try{
-			$contributionRecur_result = civicrm_api3('ContributionRecur', 'getsingle', [
+			$contributionRecur_result = $this->plugin->api->wrapper('ContributionRecur', 'getsingle', [
 				'id' => $id
 			]);
 		} catch ( CiviCRM_API3_Exception $e ) {
@@ -180,7 +180,7 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 		}
 		$contributionRecur_result['payment_token_id'] = $tokenID;
 		try {
-			$contributionRecur_result = civicrm_api3( 'ContributionRecur', 'create', $contributionRecur_result );
+			$contributionRecur_result = $this->plugin->api->wrapper( 'ContributionRecur', 'create', $contributionRecur_result );
 		} catch ( CiviCRM_API3_Exception $e ) {
 		}
 	}
@@ -203,18 +203,18 @@ class CiviCRM_Caldera_Forms_Recurring_Contribution_Processor {
 		$n = 0;
 
 		// Check each line item for an entity that can recur
-		foreach ( civicrm_api3( 'LineItem', 'get', [ 'contribution_id' => $contribution['id'], 'sequential' => 1 ] )['values'] as $line_item ) {
+		foreach ( $this->plugin->api->wrapper( 'LineItem', 'get', [ 'contribution_id' => $contribution['id'], 'sequential' => 1 ] )['values'] as $line_item ) {
 			switch ( $line_item['entity_table'] ) {
 				case 'civicrm_membership':
 					// Can the linked membership auto-renew?
-					$auto_renewal = civicrm_api3( 'Membership', 'getvalue', [
+					$auto_renewal = $this->plugin->api->wrapper( 'Membership', 'getvalue', [
 						'id' => $line_item['entity_id'],
 						'return' => 'membership_type_id.auto_renew'
 					] );
 
 					// 0 means no, 1 or 2 for optional or mandatory respectively - assume they opted in if they got this far.
 					if( $auto_renew ) {
-						civicrm_api3( 'Membership', 'create', [
+						$this->plugin->api->wrapper( 'Membership', 'create', [
 							'id' => $line_item['entity_id'],
 							'contribution_recur_id' => $contribution['contribution_recur_id'],
 						]);

@@ -1,5 +1,5 @@
 <?php
-$tokenFields = civicrm_api3( 'PaymentToken',
+$tokenFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'PaymentToken',
 	'getfields',
 	[
 		'api_action' => 'get',
@@ -8,7 +8,7 @@ $tokenFields = civicrm_api3( 'PaymentToken',
 $excludedFields = [ 'created_date', 'created_id', 'contact_id' ];
 
 // payment processor type
-$pp_result = civicrm_api3( 'PaymentProcessor',
+$pp_result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'PaymentProcessor',
 	'get',
 	[
 		'sequential' => 1,

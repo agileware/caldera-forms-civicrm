@@ -141,7 +141,7 @@ class CiviCRM_Caldera_Forms_Contact_Reference {
 			)
 		) return $value;
 
-		$employer = civicrm_api3( 'Contact', 'get', [
+		$employer = $this->plugin->api->wrapper( 'Contact', 'get', [
 			'contact_type' => 'Organization',
 			'organization_name' => $entity[$civi_field],
 			'return' => 'organization_name',
@@ -190,7 +190,7 @@ class CiviCRM_Caldera_Forms_Contact_Reference {
 	public function field_render_view( $field_value, $field, $form ) {
 
 		// use API to retrieve contact sort name
-		$contact_data = civicrm_api3( 'Contact', 'get', [
+		$contact_data = $this->plugin->api->wrapper( 'Contact', 'get', [
 			'id' => $field_value,
 			'return' => ['sort_name'],
 		] );
@@ -235,12 +235,12 @@ class CiviCRM_Caldera_Forms_Contact_Reference {
 	public function get_organisation( $value, $field ) {
 
 		if ( ! is_numeric( $value ) && isset( $field['config']['new_organization'] ) ) {
-			$employer = civicrm_api3( 'Contact', 'create', [
+			$employer = $this->plugin->api->wrapper( 'Contact', 'create', [
 				'contact_type' => 'Organization',
 				'organization_name' => $value,
 			] );
 		} else {
-			$employer = civicrm_api3( 'Contact', 'get', [
+			$employer = $this->plugin->api->wrapper( 'Contact', 'get', [
 				'contact_id' => $value,
 				'return' => 'organization_name'
 			] );

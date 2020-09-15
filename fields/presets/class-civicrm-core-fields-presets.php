@@ -78,7 +78,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 	 * @return array $presets The modified presets
 	 */
 	public function payment_instrument_options_presets( $presets ) {
-		$result = civicrm_api3( 'Contribution', 'getoptions', [
+		$result = $this->plugin->api->wrapper( 'Contribution', 'getoptions', [
 			'field' => 'payment_instrument_id',
 		] );
 
@@ -164,7 +164,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Prefix
 				case 'prefix_id':
-					$prefix_id = civicrm_api3( 'Contact', 'getoptions', [
+					$prefix_id = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'prefix_id',
 					] );
@@ -178,7 +178,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Suffix
 				case 'suffix_id':
-					$suffix_id = civicrm_api3( 'Contact', 'getoptions', [
+					$suffix_id = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'suffix_id',
 					] );
@@ -192,7 +192,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Gender
 				case 'gender_id':
-					$prefix_id = civicrm_api3( 'Contact', 'getoptions', [
+					$prefix_id = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'gender_id',
 					] );
@@ -206,7 +206,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Communication Style
 				case 'communication_style_id':
-					$communication_style_id = civicrm_api3( 'Contact', 'getoptions', [
+					$communication_style_id = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'communication_style_id',
 					] );
@@ -220,7 +220,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Do Not Email
 				case 'do_not_email':
-					$do_not_email = civicrm_api3( 'Contact', 'getoptions', [
+					$do_not_email = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'do_not_email',
 					] );
@@ -234,7 +234,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Do Not Phone
 				case 'do_not_phone':
-					$do_not_phone = civicrm_api3( 'Contact', 'getoptions', [
+					$do_not_phone = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'do_not_phone',
 					] );
@@ -248,7 +248,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Do Not Mail
 				case 'do_not_mail':
-					$do_not_mail = civicrm_api3( 'Contact', 'getoptions', [
+					$do_not_mail = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'do_not_mail',
 					] );
@@ -262,7 +262,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Do Not SMS
 				case 'do_not_sms':
-					$do_not_sms = civicrm_api3( 'Contact', 'getoptions', [
+					$do_not_sms = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'do_not_sms',
 					] );
@@ -276,7 +276,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Do Not Trade
 				case 'do_not_trade':
-					$do_not_trade = civicrm_api3( 'Contact', 'getoptions', [
+					$do_not_trade = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'do_not_trade',
 					] );
@@ -290,7 +290,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Is Opt Out
 				case 'is_opt_out':
-					$is_opt_out = civicrm_api3( 'Contact', 'getoptions', [
+					$is_opt_out = $this->plugin->api->wrapper( 'Contact', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'is_opt_out',
 					] );
@@ -304,7 +304,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Country
 				case 'country_id':
-					$country_id = civicrm_api3( 'Country', 'get', [
+					$country_id = $this->plugin->api->wrapper( 'Country', 'get', [
 						'sequential' => 1,
 						'options' => [ 'limit' => 0 ],
 					] );
@@ -329,7 +329,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Address Location Type
 				case 'location_type_id':
-					$location_type_id = civicrm_api3( 'Address', 'getoptions', [
+					$location_type_id = $this->plugin->api->wrapper( 'Address', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'location_type_id',
 					] );
@@ -343,7 +343,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Email Location Type
 				case 'e_location_type_id':
-					$e_location_type_id = civicrm_api3( 'Email', 'getoptions', [
+					$e_location_type_id = $this->plugin->api->wrapper( 'Email', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'location_type_id',
 					] );
@@ -357,7 +357,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Phone Location Type
 				case 'p_location_type_id':
-					$p_location_type_id = civicrm_api3( 'Phone', 'getoptions', [
+					$p_location_type_id = $this->plugin->api->wrapper( 'Phone', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'location_type_id',
 					] );
@@ -371,7 +371,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Phone Type
 				case 'phone_type_id':
-					$phone_type_id = civicrm_api3( 'Phone', 'getoptions', [
+					$phone_type_id = $this->plugin->api->wrapper( 'Phone', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'phone_type_id',
 					] );
@@ -385,7 +385,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 
 				// Website Type
 				case 'website_type_id':
-					$website_type_id = civicrm_api3( 'Website', 'getoptions', [
+					$website_type_id = $this->plugin->api->wrapper( 'Website', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'website_type_id',
 					] );
@@ -398,7 +398,7 @@ class CiviCRM_Caldera_Forms_Core_Fields_Presets {
 					break;
 				// IM Type
 				case 'provider_id':
-					$provider_id = civicrm_api3( 'Im', 'getoptions', [
+					$provider_id = $this->plugin->api->wrapper( 'Im', 'getoptions', [
 						'sequential' => 1,
 						'field' => 'provider_id',
 					] );

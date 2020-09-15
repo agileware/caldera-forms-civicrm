@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_Phone_Processor {
 
 			try {
 
-				$phone = civicrm_api3( 'Phone', 'getsingle', [
+				$phone = $this->plugin->api->wrapper( 'Phone', 'getsingle', [
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['location_type_id'],
 					'phone_type_id' => $config['phone_type_id'],
@@ -123,7 +123,7 @@ class CiviCRM_Caldera_Forms_Phone_Processor {
 					$form_values['id'] = $phone['id']; // Phone ID
 
 				try {
-					$create_phone = civicrm_api3( 'Phone', 'create', $form_values );
+					$create_phone = $this->plugin->api->wrapper( 'Phone', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -158,7 +158,7 @@ class CiviCRM_Caldera_Forms_Phone_Processor {
 				if ( isset( $transient->contacts->{$contact_link} ) ) {
 					try {
 
-						$phone = civicrm_api3( 'Phone', 'getsingle', [
+						$phone = $this->plugin->api->wrapper( 'Phone', 'getsingle', [
 							'contact_id' => $transient->contacts->{$contact_link},
 							'location_type_id' => $pr_id['config']['location_type_id'],
 							'phone_type_id' => $pr_id['config']['phone_type_id'],

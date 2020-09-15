@@ -37,17 +37,10 @@ class CiviCRM_Caldera_Forms_CRM_API {
 	 * @return array|Exception The result of the API call, an error array, or an Exception
 	 */
 	public function wrapper( $entity, $action, $params, $ignore = false ) {
-		if ( empty( $entity ) || empty( $action ) || empty( $params ) )
-			throw new Exception( 'One of given parameters is empty.' );
-
-		try {
-			$result = civicrm_api3( $entity, $action, $params );
-		} catch ( CiviCRM_API3_Exception $e ) {
-			if ( ! $ignore ) {
-				$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
-				return [ 'note' => $error, 'type' => 'error' ];
-			}
-		}
+		$originalTimezone = date_default_timezone_get();
+		date_default_timezone_set( wp_timezone_string() );
+		$result = civicrm_api3( $entity, $action, $params );
+		date_default_timezone_set( $originalTimezone );
 		return $result;
 	}
 }

@@ -212,7 +212,7 @@ class CiviCRM_Caldera_Forms_Custom_Fields_Presets {
 		if ( ! empty( $this->custom_fields ) ) return $this->custom_fields;
 
 		// get all custom fields
-		$custom_fields = civicrm_api3( 'CustomField', 'get', [
+		$custom_fields = $this->plugin->api->wrapper( 'CustomField', 'get', [
 			'is_active' => 1,
 			'return' => [ 'name', 'label', 'custom_group_id', 'option_group_id', 'html_type', 'custom_group_id.extends', 'custom_group_id.title' ],
 			'options' => [ 'limit' => 0 ],
@@ -241,7 +241,7 @@ class CiviCRM_Caldera_Forms_Custom_Fields_Presets {
 
 		try {
 
-			$option_values = civicrm_api3( 'OptionValue', 'get', [
+			$option_values = $this->plugin->api->wrapper( 'OptionValue', 'get', [
 				'sequential' => 1,
 				'option_group_id' => $option_group_id,
 				'options' => ['limit' => 0, 'sort' => 'weight ASC'],

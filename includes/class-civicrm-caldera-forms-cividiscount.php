@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 
 		if ( is_array( $this->cividiscounts ) ) return $this->cividiscounts;
 
-		$discounts = civicrm_api3( 'DiscountCode', 'get', [
+		$discounts = $this->plugin->api->wrapper( 'DiscountCode', 'get', [
 			'is_active' => 1,
 			'options' => [ 'limit' => 0 ]
 		] );
@@ -218,7 +218,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 			foreach ( $autodiscount as $entity => $params ) {
 				$params['contact_id'] = $contact_id;
 				try {
-					$result = civicrm_api3( $entity, 'getsingle', $params );
+					$result = $this->plugin->api->wrapper( $entity, 'getsingle', $params );
 					if ( ! empty( $result['id'] ) ) {
 						$is_autodiscount = true;
 						break;
@@ -244,7 +244,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 	public function get_by_code( $code ) {
 
 		try {
-			$discount = civicrm_api3( 'DiscountCode', 'getsingle', [
+			$discount = $this->plugin->api->wrapper( 'DiscountCode', 'getsingle', [
 				'sequential' => 1,
 				'code' => $code,
 				'is_active' => 1
@@ -821,7 +821,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 			}
 
 			try {
-				$result = civicrm_api3( $entity, 'getsingle', $params );
+				$result = $this->plugin->api->wrapper( $entity, 'getsingle', $params );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				$result = false;
 			}
@@ -840,7 +840,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 					$discount = $entities_discounts[$processor['processor_id']];
 					// safe to track discount
 					try {
-						$discount_track = civicrm_api3( 'DiscountTrack', 'create', [
+						$discount_track = $this->plugin->api->wrapper( 'DiscountTrack', 'create', [
 							'item_id' => $discount['id'],
 							'contact_id' => $order['contact_id'],
 							'contribution_id' => $order['id'],
@@ -862,7 +862,7 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 					$discount = $entities_discounts[$processor['processor_id']];
 					// safe to track discount
 					try {
-						$discount_track = civicrm_api3( 'DiscountTrack', 'create', [
+						$discount_track = $this->plugin->api->wrapper( 'DiscountTrack', 'create', [
 							'item_id' => $discount['id'],
 							'contact_id' => $order['contact_id'],
 							'contribution_id' => $order['id'],
@@ -885,12 +885,12 @@ class CiviCRM_Caldera_Forms_CiviDiscount {
 
 					// safe to track discount
 					try {
-						$contribution_page = civicrm_api3( 'ContributionPage', 'getsingle', [
+						$contribution_page = $this->plugin->api->wrapper( 'ContributionPage', 'getsingle', [
 							'id' => $result['contribution_page_id'],
 							'return' => ['title']
 						] );
 
-						$discount_track = civicrm_api3( 'DiscountTrack', 'create', [
+						$discount_track = $this->plugin->api->wrapper( 'DiscountTrack', 'create', [
 							'item_id' => $discount['id'],
 							'contact_id' => $order['contact_id'],
 							'contribution_id' => $order['id'],

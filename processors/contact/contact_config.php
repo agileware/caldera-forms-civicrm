@@ -63,14 +63,14 @@
 <?php
 
 // Get Contact Types
-$contactTypeResult = civicrm_api3( 'ContactType', 'get', [
+$contactTypeResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContactType', 'get', [
 	'sequential' => 0,
 	'is_active' => 1,
 	'parent_id' => [ 'IS NULL' => 1 ],
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$contactSubTypeResult = civicrm_api3( 'ContactType', 'get', [
+$contactSubTypeResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContactType', 'get', [
 	'sequential' => 1,
 	'parent_id' => [ 'IS NOT NULL' => 1 ],
 	'is_active' => 1,
@@ -80,7 +80,7 @@ $contactSubTypeResult = civicrm_api3( 'ContactType', 'get', [
 $orgStandardFields = [ 'organization_name', 'sic_code', 'legal_name' ];
 $indStandardFields = [ 'first_name', 'last_name', 'middle_name', 'prefix_id', 'suffix_id', 'current_employer', 'birth_date', 'gender_id', 'job_title' ];
 
-$relationships = civicrm_api3( 'RelationshipType', 'get', [
+$relationships = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'RelationshipType', 'get', [
   'sequential' => 1,
   'is_active' => 1,
   'options' => [ 'limit' => 0 ],
@@ -162,7 +162,7 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 	<h2 style="display: inline-block;"><?php _e( 'Standard Fields', 'cf-civicrm' ); ?></h2>
 	<?php
 
-	$contactFieldsResult = civicrm_api3( 'Contact', 'getfields', [
+	$contactFieldsResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contact', 'getfields', [
 		'sequential' => 1,
 	] );
 
@@ -213,11 +213,11 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Address entity === -->
 <?php
-	$address_fields = civicrm_api3( 'Address', 'getfields', [
+	$address_fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Address', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$address_location_type = civicrm_api3( 'Address', 'getoptions', [
+	$address_location_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Address', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );
@@ -266,16 +266,16 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Phone entity === -->
 <?php
-	$phone_fields = civicrm_api3( 'Phone', 'getfields', [
+	$phone_fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$phone_location_type = civicrm_api3( 'Phone', 'getoptions', [
+	$phone_location_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );
 
-	$phone_type = civicrm_api3( 'Phone', 'getoptions', [
+	$phone_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getoptions', [
 		'field' => 'phone_type_id',
 	] );
 
@@ -327,7 +327,7 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Note entity === -->
 <?php
-	$noteFields = civicrm_api3( 'Note', 'getfields', [
+	$noteFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Note', 'getfields', [
 		'sequential' => 1,
 	] );
 
@@ -354,11 +354,11 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Email entity === -->
 <?php
-	$emailFields = civicrm_api3( 'Email', 'getfields', [
+	$emailFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Email', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$emailLocationType = civicrm_api3( 'Email', 'getoptions', [
+	$emailLocationType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Email', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );
@@ -399,11 +399,11 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Website entity === -->
 <?php
-	$websiteFields = civicrm_api3( 'Website', 'getfields', [
+	$websiteFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Website', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$websiteType = civicrm_api3( 'Website', 'getoptions', [
+	$websiteType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Website', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'website_type_id',
 	] );
@@ -446,11 +446,11 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Im entity === -->
 <?php
-	$imFields = civicrm_api3( 'Im', 'getfields', [
+	$imFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Im', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$imType = civicrm_api3( 'Im', 'getoptions', [
+	$imType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Im', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );
@@ -493,7 +493,7 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Group entity === -->
 <?php
-	$groupsResult = civicrm_api3( 'Group', 'get', [
+	$groupsResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Group', 'get', [
 		'sequential' => 1,
 		'cache_date' => [ 'IS NULL' => 1 ],
 		'is_active' => 1,
@@ -522,7 +522,7 @@ $relationships = civicrm_api3( 'RelationshipType', 'get', [
 
 <!-- === Tag entity === -->
 <?php
-	$tagResult = $result = civicrm_api3( 'Tag', 'get', [
+	$tagResult = $result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Tag', 'get', [
 		'sequential' => 1,
 		'used_for' => 'civicrm_contact',
 		'options' => [ 'limit' => 0 ],

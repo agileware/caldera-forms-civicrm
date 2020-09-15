@@ -1,12 +1,12 @@
 <?php
-$contribution_recur_fields_result = civicrm_api3( 'ContributionRecur',
+$contribution_recur_fields_result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContributionRecur',
 	'getfields',
 	[
 		'sequential' => 1,
 		'api_action' => 'create',
 	] );
 
-$unit_result = civicrm_api3( 'OptionGroup',
+$unit_result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'OptionGroup',
 	'get',
 	[
 		'sequential'          => 1,
@@ -15,7 +15,7 @@ $unit_result = civicrm_api3( 'OptionGroup',
 	] );
 $unit_result = array_shift( $unit_result['values'] )['api.OptionValue.get'];
 
-$pp_result = civicrm_api3( 'PaymentProcessor',
+$pp_result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'PaymentProcessor',
 	'get',
 	[
 		'sequential' => 1,

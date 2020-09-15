@@ -1,11 +1,11 @@
 <?php
 
-$financial_types = civicrm_api3( 'Contribution', 'getoptions', [
+$financial_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contribution', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'financial_type_id',
 ] );
 
-$contribution_fields_result = civicrm_api3( 'Contribution', 'getfields', [
+$contribution_fields_result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Contribution', 'getfields', [
   'sequential' => 1,
   'api_action' => 'create',
 ] );

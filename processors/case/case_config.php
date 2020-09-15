@@ -1,16 +1,16 @@
 <?php
 
-$caseTypes = civicrm_api3( 'Case', 'getoptions', [
+$caseTypes = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Case', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'case_type_id',
 ] );
 
-$case_status = civicrm_api3( 'Case', 'getoptions', [
+$case_status = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Case', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'case_status_id',
 ] );
 
-$caseFieldsResult = civicrm_api3( 'Case', 'getfields', [
+$caseFieldsResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Case', 'getfields', [
 	'sequential' => 1,
 	'api_action' => 'create'
 ] );

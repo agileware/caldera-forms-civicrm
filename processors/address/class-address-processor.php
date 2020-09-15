@@ -90,7 +90,7 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 		if ( ! empty( $transient->contacts->{$this->contact_link} ) ) {
 
 			try {
-				$address = civicrm_api3( 'Address', 'getsingle', [
+				$address = $this->plugin->api->wrapper( 'Address', 'getsingle', [
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['location_type_id'],
 				] );
@@ -123,7 +123,7 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 				}
 
 				try {
-					$create_address = civicrm_api3( 'Address', 'create', $form_values );
+					$create_address = $this->plugin->api->wrapper( 'Address', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -158,7 +158,7 @@ class CiviCRM_Caldera_Forms_Address_Processor {
 				if ( isset( $transient->contacts->{$contact_link} ) ) {
 					try {
 
-						$address = civicrm_api3( 'Address', 'getsingle', [
+						$address = $this->plugin->api->wrapper( 'Address', 'getsingle', [
 							'contact_id' => $transient->contacts->{$contact_link},
 							'location_type_id' => $pr_id['config']['location_type_id'],
 						] );

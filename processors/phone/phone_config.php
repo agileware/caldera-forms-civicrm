@@ -1,15 +1,15 @@
 <?php
 
-$phone_fields = civicrm_api3( 'Phone', 'getfields', [
+$phone_fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getfields', [
 	'sequential' => 1,
 ] );
 
-$phone_location_type = civicrm_api3( 'Phone', 'getoptions', [
+$phone_location_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'location_type_id',
 ] );
 
-$phone_type = civicrm_api3( 'Phone', 'getoptions', [
+$phone_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Phone', 'getoptions', [
 	'field' => 'phone_type_id',
 ] );
 

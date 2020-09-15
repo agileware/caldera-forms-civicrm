@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_Website_Processor {
 
 			try {
 
-				$website = civicrm_api3( 'Website', 'getsingle', [
+				$website = $this->plugin->api->wrapper( 'Website', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'website_type_id' => $config['website_type_id'],
@@ -123,7 +123,7 @@ class CiviCRM_Caldera_Forms_Website_Processor {
 				}
 
 				try {
-					$create_email = civicrm_api3( 'Website', 'create', $form_values );
+					$create_email = $this->plugin->api->wrapper( 'Website', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -158,7 +158,7 @@ class CiviCRM_Caldera_Forms_Website_Processor {
 				if ( isset( $transient->contacts->{$contact_link}) ) {
 					try {
 
-						$contact_website = civicrm_api3( 'Website', 'getsingle', [
+						$contact_website = $this->plugin->api->wrapper( 'Website', 'getsingle', [
 							'sequential' => 1,
 							'contact_id' => $transient->contacts->{$contact_link},
 							'website_type_id' => $pr_id['config']['website_type_id'],

@@ -1,9 +1,9 @@
 <?php
-	$imFields = civicrm_api3( 'Im', 'getfields', [
+	$imFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Im', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$imType = civicrm_api3( 'Im', 'getoptions', [
+	$imType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Im', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );

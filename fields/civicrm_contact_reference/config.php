@@ -1,12 +1,12 @@
 <?php
-$contact_types = civicrm_api3( 'ContactType', 'get', [
+$contact_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContactType', 'get', [
 	'sequential' => 0,
 	'is_active' => 1,
 	'parent_id' => [ 'IS NULL' => 1 ],
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$contact_sub_types = civicrm_api3( 'ContactType', 'get', [
+$contact_sub_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'ContactType', 'get', [
 	'sequential' => 1,
 	'parent_id' => [ 'IS NOT NULL' => 1 ],
 	'is_active' => 1,

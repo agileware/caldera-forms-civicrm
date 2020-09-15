@@ -116,7 +116,7 @@ class CiviCRM_Caldera_Forms_Field_Premium {
 		if ( $field['type'] != $this->key_name ) return $field;
 
 		if ( isset( $field['config']['premium_id'] ) )
-			$premium = civicrm_api3( 'Product', 'getsingle', [ 'id' => $field['config']['premium_id'] ] );
+			$premium = $this->plugin->api->wrapper( 'Product', 'getsingle', [ 'id' => $field['config']['premium_id'] ] );
 
 		if ( ! $premium ) return $field;
 

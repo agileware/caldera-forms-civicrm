@@ -1,6 +1,6 @@
 <?php
 
-$groupsResult = civicrm_api3( 'Group', 'get', [
+$groupsResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Group', 'get', [
 	'sequential' => 1,
 	'cache_date' => [ 'IS NULL' => 1 ],
 	'is_active' => 1,

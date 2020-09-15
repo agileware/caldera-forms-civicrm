@@ -131,7 +131,7 @@ class CiviCRM_Caldera_Forms_Case_Processor {
 		$form_values = $this->plugin->helper->map_fields_to_processor( $config, $form, $form_values );
 
 		if ( isset( $config['dismiss_case'] ) ) {
-			$existing_case = civicrm_api3( 'Case', 'get', [
+			$existing_case = $this->plugin->api->wrapper( 'Case', 'get', [
 				'sequential' => 1,
 				'contact_id' => $transient->contacts->{$this->contact_link},
 				'case_type_id' => $config['case_type_id'],
@@ -168,7 +168,7 @@ class CiviCRM_Caldera_Forms_Case_Processor {
 
 		} else {
 			try {
-				$create_case = civicrm_api3( 'Case', 'create', $form_values );
+				$create_case = $this->plugin->api->wrapper( 'Case', 'create', $form_values );
 
 				$this->maybe_add_case_manager( $config, $create_case );
 
@@ -233,7 +233,7 @@ class CiviCRM_Caldera_Forms_Case_Processor {
 		try {
 
 			// get case type definition
-			$case_type = civicrm_api3( 'CaseType', 'getsingle', [
+			$case_type = $this->plugin->api->wrapper( 'CaseType', 'getsingle', [
 				'id' => $config['case_type_id'],
 				'return' => ['definition']
 			] );
@@ -260,7 +260,7 @@ class CiviCRM_Caldera_Forms_Case_Processor {
 		try {
 
 			// get relationship type
-			$relationship_type = civicrm_api3( 'RelationshipType', 'getsingle', [
+			$relationship_type = $this->plugin->api->wrapper( 'RelationshipType', 'getsingle', [
 				'name_b_a' => $relationship_name,
 				'label_b_a' => $relationship_name,
 				'options' => ['or' => [['name_b_a', 'label_b_a']]]
@@ -278,7 +278,7 @@ class CiviCRM_Caldera_Forms_Case_Processor {
 		try {
 
 			// create relationship
-			$manager_relationship = civicrm_api3( 'Relationship', 'create', [
+			$manager_relationship = $this->plugin->api->wrapper( 'Relationship', 'create', [
 				'contact_id_a' => $transient->contacts->{$this->contact_link},
 				'contact_id_b' => $case_manager_id,
 				'relationship_type_id' => $relationship_type['id'],

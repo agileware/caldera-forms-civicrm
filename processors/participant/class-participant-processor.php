@@ -197,7 +197,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 			}
 
 			if ( is_array( $config['id'] ) ) {
-				$is_registered = civicrm_api3( 'Participant', 'get', [
+				$is_registered = $this->plugin->api->wrapper( 'Participant', 'get', [
 					'event_id' => $event['id'],
 					'contact_id' => $transient->contacts->{$this->contact_link}
 				] );
@@ -252,7 +252,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 
 								if ( $item['entity_table'] == 'civicrm_participant' ) {
 
-									$participant = civicrm_api3( 'Participant', 'get', [ 'id' => $item['entity_id'] ] );
+									$participant = $this->plugin->api->wrapper( 'Participant', 'get', [ 'id' => $item['entity_id'] ] );
 
 									if ( is_array( $participant ) && ! $participant['is_error'] && $participant['values'][$item['entity_id']]['event_id'] == $event['id'] ) {
 
@@ -285,7 +285,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 						 */
 						$form_values = apply_filters( 'cfc_participant_before_create_params', $form_values, $event, $this->registrations, $config, $form );
 
-						$create_participant = civicrm_api3( 'Participant', 'create', $form_values );
+						$create_participant = $this->plugin->api->wrapper( 'Participant', 'create', $form_values );
 
 						$participant = $create_participant['values'][$create_participant['id']];
 
@@ -397,7 +397,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 		if ( ! $event_ids ) return false;
 
 		try {
-			$events_result = civicrm_api3( 'Event', 'get', [
+			$events_result = $this->plugin->api->wrapper( 'Event', 'get', [
 				'id' => [ 'IN' => array_values( $event_ids ) ]
 			] );
 		} catch ( CiviCRM_API3_Exception $e ) {
@@ -775,7 +775,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 	public function get_event( $id ) {
 
 		try {
-			$event = civicrm_api3( 'Event', 'getsingle', [ 'id' => $id ] );
+			$event = $this->plugin->api->wrapper( 'Event', 'getsingle', [ 'id' => $id ] );
 		} catch( CiviCRM_API3_Exception $e ) {
 			$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 			return [ 'note' => $error, 'type' => 'error' ];
@@ -846,7 +846,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 			if ( ! isset( $transient->contacts->{$contact_link} ) || empty( $transient->contacts->{$contact_link} ) ) return;
 
 			try {
-				$participant = civicrm_api3( 'Participant', 'get', [
+				$participant = $this->plugin->api->wrapper( 'Participant', 'get', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$contact_link},
 					'event_id' => [ 'IN' => array_values( $event_ids ) ]
@@ -897,7 +897,7 @@ class CiviCRM_Caldera_Forms_Participant_Processor {
 			$address_fields = [ 'name', 'street_address', 'supplemental_address_1', 'supplemental_address_2', 'supplemental_address_3', 'city', 'state_province_id.abbreviation', 'postal_code', 'country_id.name' ];
 
 			try {
-				$billing_address = civicrm_api3( 'Address', 'get', [
+				$billing_address = $this->plugin->api->wrapper( 'Address', 'get', [
 					'sequential' => 1,
 					'contact_id' => $participant['contact_id'],
 					'location_type_id' => 'Billing',

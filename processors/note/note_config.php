@@ -1,6 +1,6 @@
 <?php
 
-$noteFields = civicrm_api3( 'Note', 'getfields', [
+$noteFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Note', 'getfields', [
 	'sequential' => 1,
 ] );
 

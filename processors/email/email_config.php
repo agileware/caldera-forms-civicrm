@@ -1,9 +1,9 @@
 <?php
-	$emailFields = civicrm_api3( 'Email', 'getfields', [
+	$emailFields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Email', 'getfields', [
 		'sequential' => 1,
 	] );
 
-	$emailLocationType = civicrm_api3( 'Email', 'getoptions', [
+	$emailLocationType = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Email', 'getoptions', [
 		'sequential' => 1,
 		'field' => 'location_type_id',
 	] );

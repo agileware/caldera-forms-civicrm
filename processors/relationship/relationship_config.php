@@ -1,6 +1,6 @@
 <?php
 
-$relationships = civicrm_api3( 'RelationshipType', 'get', [
+$relationships = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'RelationshipType', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],

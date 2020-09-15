@@ -72,7 +72,7 @@ class CiviCRM_Caldera_Forms_Relationship_Processor {
 		// cfc transient object
 		$transient = $this->plugin->transient->get();
 
-		$relationship = civicrm_api3( 'Relationship', 'get', [
+		$relationship = $this->plugin->api->wrapper( 'Relationship', 'get', [
 			'sequential' => 1,
 			'contact_id_a' => $transient->contacts->{'cid_'.$config['contact_a']},
 			'contact_id_b' => $transient->contacts->{'cid_'.$config['contact_b']},
@@ -83,7 +83,7 @@ class CiviCRM_Caldera_Forms_Relationship_Processor {
 			return;
 		} else {
 			try {
-				$create_relationship = civicrm_api3( 'Relationship', 'create', [
+				$create_relationship = $this->plugin->api->wrapper( 'Relationship', 'create', [
 					'sequential' => 1,
 					'contact_id_a' => $transient->contacts->{'cid_'.$config['contact_a']},
 					'contact_id_b' => $transient->contacts->{'cid_'.$config['contact_b']},

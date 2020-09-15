@@ -1,16 +1,16 @@
 <?php
 
-$fields = civicrm_api3( 'Participant', 'getfields', [
+$fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Participant', 'getfields', [
 	'sequential' => 1,
 	'action' => 'create',
 ] );
 
-$participant_roles = civicrm_api3( 'Participant', 'getoptions', [
+$participant_roles = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Participant', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'participant_role_id',
 ] );
 
-$participant_statuses = civicrm_api3( 'Participant', 'getoptions', [
+$participant_statuses = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Participant', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'participant_status_id',
 ] );
@@ -24,7 +24,7 @@ $ignore = [ 'event_id', 'contact_id', 'is_test', 'discount_amount', 'cart_id', '
 
 $current_fields = [ 'source', 'registered_by_id' ];
 
-$events = civicrm_api3( 'Event', 'get', [
+$events = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Event', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'is_online_registration' => 1,
@@ -32,7 +32,7 @@ $events = civicrm_api3( 'Event', 'get', [
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$campaigns = civicrm_api3( 'Campaign', 'get', [
+$campaigns = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Campaign', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],

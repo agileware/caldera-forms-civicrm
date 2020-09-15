@@ -2,23 +2,23 @@
 
 $ignore_fields = [ 'target_contact_id', 'source_contact_id', 'assignee_contact_id', 'source_record_id', 'contact_id' ];
 
-$activities = civicrm_api3( 'Activity', 'getoptions', [
+$activities = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Activity', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'activity_type_id',
 ] );
 
-$activity_status = civicrm_api3( 'Activity', 'getoptions', [
+$activity_status = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Activity', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'status_id',
 ] );
 
-$campaign_id = civicrm_api3( 'Campaign', 'get', [
+$campaign_id = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Campaign', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$activityFieldsResult = civicrm_api3( 'Activity', 'getfields', [
+$activityFieldsResult = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Activity', 'getfields', [
 	'sequential' => 1,
 ] );
 

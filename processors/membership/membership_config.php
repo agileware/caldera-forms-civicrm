@@ -1,6 +1,6 @@
 <?php
 
-$fields = civicrm_api3( 'Membership', 'getfields', [
+$fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Membership', 'getfields', [
 	'sequential' => 1,
 	'action' => 'create',
 ] );
@@ -14,14 +14,14 @@ $ignore = [ 'membership_type_id', 'contact_id', 'is_test', 'status_id', 'is_over
 
 $current_fields = [ 'source' ];
 
-$membership_types = civicrm_api3( 'MembershipType', 'get', [
+$membership_types = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'MembershipType', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'visibility' => 'Public',
 	'options' => [ 'limit' => 0 ],
 ] );
 
-$campaigns = civicrm_api3( 'Campaign', 'get', [
+$campaigns = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Campaign', 'get', [
 	'sequential' => 1,
 	'is_active' => 1,
 	'options' => [ 'limit' => 0 ],

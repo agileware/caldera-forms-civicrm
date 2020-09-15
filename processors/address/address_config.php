@@ -1,10 +1,10 @@
 <?php
 
-$address_fields = civicrm_api3( 'Address', 'getfields', [
+$address_fields = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Address', 'getfields', [
 	'sequential' => 1,
 ] );
 
-$address_location_type = civicrm_api3( 'Address', 'getoptions', [
+$address_location_type = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'Address', 'getoptions', [
 	'sequential' => 1,
 	'field' => 'location_type_id',
 ] );

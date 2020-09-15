@@ -95,7 +95,7 @@ class CiviCRM_Caldera_Forms_Contribution_Processor {
 
 				$form_values['contact_id'] = $transient->contacts->{$this->contact_link}; // Contact ID
 
-			$credit_card_id = civicrm_api3( 'OptionValue', 'get', [
+			$credit_card_id = $this->plugin->api->wrapper( 'OptionValue', 'get', [
 				'sequential' => 1,
 				'option_group_id.name' => 'payment_instrument',
 				'name' => 'Credit Card',
@@ -108,7 +108,7 @@ class CiviCRM_Caldera_Forms_Contribution_Processor {
 				$form_values['contribution_status_id'] = 2; // set status to Pending (pay later)
 
 			try {
-				$create_contribution = civicrm_api3( 'Contribution', 'create', $form_values );
+				$create_contribution = $this->plugin->api->wrapper( 'Contribution', 'create', $form_values );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				$error = $e->getMessage() . "<br><br><pre>" . $e->getTraceAsString() . "</per>";
 				return [ 'note' => $error, 'type' => 'error' ];

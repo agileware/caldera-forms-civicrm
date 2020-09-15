@@ -86,7 +86,7 @@ class CiviCRM_Caldera_Forms_Group_Processor {
 
 		// Add Contact to group
 		try {
-			$result = civicrm_api3( 'GroupContact', 'create', [
+			$result = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'GroupContact', 'create', [
 				'sequential' => 1,
 				'group_id' => $config['contact_group'], // Group ID from processor config
 				'contact_id' => $transient->contacts->{$this->contact_link}, // Contact ID set in Contact Processor

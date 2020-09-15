@@ -91,7 +91,7 @@ class CiviCRM_Caldera_Forms_Note_Processor {
 			$form_values['modified_date'] = date( 'YmdHis', strtotime( 'now' ) );
 			// Add Note to contact
 			try {
-				$note = civicrm_api3( 'Note', 'create', $form_values );
+				$note = $this->plugin->api->wrapper( 'Note', 'create', $form_values );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 				return [ 'note' => $error, 'type' => 'error' ];

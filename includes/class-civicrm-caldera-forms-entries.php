@@ -43,7 +43,7 @@ class CiviCRM_Caldera_Forms_Entries {
 			$field = Caldera_Forms_Field_Util::get_field( $field_id, $form );
 			if ( ! empty( $values['value'] ) && $field['type'] == 'file' && isset( $field['config']['civicrm_file_upload'] ) ) {
 				try {
-					$attachment = civicrm_api3( 'Attachment', 'getsingle', [
+					$attachment = $this->plugin->api->wrapper( 'Attachment', 'getsingle', [
   						'id' => $values['value'],
 					] );
 				} catch ( CiviCRM_API3_Exception $e ) {

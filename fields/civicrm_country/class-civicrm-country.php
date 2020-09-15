@@ -96,7 +96,7 @@ class CiviCRM_Caldera_Forms_Field_Country {
 	public function field_render_view( $field_value, $field, $form ) {
 
 		// use API to retrieve Country name
-		$country_data = civicrm_api3( 'Country', 'get', [
+		$country_data = $this->plugin->api->wrapper( 'Country', 'get', [
 			'id' => $field_value,
 		] );
 

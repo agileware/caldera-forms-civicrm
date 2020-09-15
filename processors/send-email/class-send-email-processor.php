@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_Send_Email_Processor {
 		}
 
 		try {
-			$send_email = civicrm_api3( 'Email', 'send', $params );
+			$send_email = $this->plugin->api->wrapper( 'Email', 'send', $params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 			return [ 'note' => $error, 'type' => 'error' ];

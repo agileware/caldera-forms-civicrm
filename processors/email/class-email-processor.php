@@ -99,7 +99,7 @@ class CiviCRM_Caldera_Forms_Email_Processor {
 
 			try {
 
-				$email = civicrm_api3( 'Email', 'getsingle', [
+				$email = $this->plugin->api->wrapper( 'Email', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['location_type_id'],
@@ -123,7 +123,7 @@ class CiviCRM_Caldera_Forms_Email_Processor {
 				}
 
 				try {
-					$create_email = civicrm_api3( 'Email', 'create', $form_values );
+					$create_email = $this->plugin->api->wrapper( 'Email', 'create', $form_values );
 				} catch ( CiviCRM_API3_Exception $e) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -158,7 +158,7 @@ class CiviCRM_Caldera_Forms_Email_Processor {
 				if ( isset( $transient->contacts->{$contact_link} ) ) {
 					try {
 
-						$contact_email = civicrm_api3( 'Email', 'getsingle', [
+						$contact_email = $this->plugin->api->wrapper( 'Email', 'getsingle', [
 							'sequential' => 1,
 							'contact_id' => $transient->contacts->{$contact_link},
 							'location_type_id' => $pr_id['config']['location_type_id'],

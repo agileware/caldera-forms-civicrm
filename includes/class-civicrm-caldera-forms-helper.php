@@ -126,7 +126,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 */
 	public function get_contact_custom_fields() {
 
-		$contact_types = civicrm_api3( 'ContactType', 'get', [
+		$contact_types = $this->plugin->api->wrapper( 'ContactType', 'get', [
 			'sequential' => 1,
 			'is_active' => 1,
 			'options' => [ 'limit' => 0 ],
@@ -140,7 +140,7 @@ class CiviCRM_Caldera_Forms_Helper {
 
 		$extends = [ 'IN' => $types ];
 
-		$custom_group = civicrm_api3( 'CustomGroup', 'get', [
+		$custom_group = $this->plugin->api->wrapper( 'CustomGroup', 'get', [
 			'sequential' => 1,
 			'is_active' => 1,
 			'extends' => apply_filters( 'cfc_custom_fields_contact_type', $extends ),
@@ -175,7 +175,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		];
 
 		try {
-			$wp_civicrm_contact = civicrm_api3( 'UFMatch', 'getsingle', $params );
+			$wp_civicrm_contact = $this->plugin->api->wrapper( 'UFMatch', 'getsingle', $params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			Civi::log()->debug( 'Unable to match contact for user with id ' . $id );
 		}
@@ -202,7 +202,7 @@ class CiviCRM_Caldera_Forms_Helper {
 			];
 
 			try {
-				$fields = civicrm_api3( 'Contact', 'getsingle', $params );
+				$fields = $this->plugin->api->wrapper( 'Contact', 'getsingle', $params );
 			} catch ( CiviCRM_API3_Exception $e ) {
 
 			}
@@ -215,7 +215,7 @@ class CiviCRM_Caldera_Forms_Helper {
 			$params['return'] = $c_fields;
 
 			try {
-				$custom_fields = civicrm_api3( 'Contact', 'getsingle', $params );
+				$custom_fields = $this->plugin->api->wrapper( 'Contact', 'getsingle', $params );
 			} catch ( CiviCRM_API3_Exception $e ) {
 
 			}
@@ -236,7 +236,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 */
 	public function get_all_fields() {
 
-		$contact_fields = civicrm_api3( 'Contact', 'getfields', [ 'sequential' => 1, ] );
+		$contact_fields = $this->plugin->api->wrapper( 'Contact', 'getfields', [ 'sequential' => 1, ] );
 
 		return $contact_fields['values'];
 
@@ -266,7 +266,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		}
 
 		// okay, let's hit the API
-		return civicrm_api3( 'Country', 'get', $api_vars );
+		return $this->plugin->api->wrapper( 'Country', 'get', $api_vars );
 
 	}
 
@@ -289,7 +289,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		}
 
 		try {
-			$states = civicrm_api3( 'StateProvince', 'get', $params );
+			$states = $this->plugin->api->wrapper( 'StateProvince', 'get', $params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			Civi::log()->info( '' . __FILE__ . '#' . __LINE__ . ': ' . print_r($e->getMessage() , TRUE ) );
 			return [];
@@ -317,7 +317,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 */
 	public function get_civicrm_settings( $setting ){
 
-		$settings = civicrm_api3( 'Setting', 'getvalue', [
+		$settings = $this->plugin->api->wrapper( 'Setting', 'getvalue', [
 			'sequential' => 1,
 			'name' => $setting,
 		] );
@@ -357,7 +357,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		$id = (int)$custom_id;
 
 		try {
-			$result = civicrm_api3( 'CustomField', 'getsingle', [
+			$result = $this->plugin->api->wrapper( 'CustomField', 'getsingle', [
 				'sequential' => 1,
 				'id' => $id,
 				'api.CustomGroup.getsingle' => [
@@ -546,7 +546,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 */
 	public function get_enabled_extensions(){
 		try {
-			$result = civicrm_api3( 'Extension', 'get', [
+			$result = $this->plugin->api->wrapper( 'Extension', 'get', [
 				'sequential' => 1,
 				'status' => 'installed',
 				'statusLabel' => 'Enabled',
@@ -681,7 +681,7 @@ class CiviCRM_Caldera_Forms_Helper {
 
 		if ( is_array( $this->tax_rates ) ) return $this->tax_rates;
 
-		$tax_financial_accounts = civicrm_api3( 'EntityFinancialAccount', 'get', [
+		$tax_financial_accounts = $this->plugin->api->wrapper( 'EntityFinancialAccount', 'get', [
 			'return' => [
 				'id',
 				'entity_table',
@@ -788,13 +788,13 @@ class CiviCRM_Caldera_Forms_Helper {
 
 
 		try {
-			$result_price_sets = civicrm_api3( 'PriceSet', 'get', $price_set_params );
+			$result_price_sets = $this->plugin->api->wrapper( 'PriceSet', 'get', $price_set_params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			return [ 'note' => $e->getMessage(), 'type' => 'error' ];
 		}
 
 		try {
-			$all_price_field_values = civicrm_api3( 'PriceFieldValue', 'get', [
+			$all_price_field_values = $this->plugin->api->wrapper( 'PriceFieldValue', 'get', [
 				'sequential' => 0,
 				'is_active' => 1,
 				'options' => [ 'limit' => 0 ],
@@ -944,7 +944,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 * @return array|boolean The membership types for that organization or false
 	 */
 	public function get_organization_membership_types( $cid ) {
-		$membership_types = civicrm_api3( 'MembershipType', 'get', [
+		$membership_types = $this->plugin->api->wrapper( 'MembershipType', 'get', [
 		  'return' => ['id'],
 		  'member_of_contact_id' => $cid,
 		] );
@@ -988,7 +988,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		if ( $membership_type )
 			$params['membership_type_id'] = $membership_type;
 
-		$memberships = civicrm_api3( 'Membership', 'get', $params );
+		$memberships = $this->plugin->api->wrapper( 'Membership', 'get', $params );
 
 		if ( ! $memberships['is_error'] && $memberships['count'] )
 			return array_pop( $memberships['values'] );
@@ -1083,7 +1083,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	public function get_participant_custom_fields() {
 
 		try {
-			$custom_groups = civicrm_api3( 'CustomGroup', 'get', [
+			$custom_groups = $this->plugin->api->wrapper( 'CustomGroup', 'get', [
 				'sequential' => 1,
 				'is_active' => 1,
 				'extends' => 'Participant',
@@ -1188,7 +1188,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	public function get_case_custom_fields() {
 
 		try {
-			$custom_groups = civicrm_api3( 'CustomGroup', 'get', [
+			$custom_groups = $this->plugin->api->wrapper( 'CustomGroup', 'get', [
 				'sequential' => 1,
 				'is_active' => 1,
 				'extends' => 'Case',
@@ -1243,7 +1243,7 @@ class CiviCRM_Caldera_Forms_Helper {
 
 			if ( empty( $processor['runtimes'] ) ) return $contacts;
 
-			$relationship = civicrm_api3( 'Relationship', 'get', [
+			$relationship = $this->plugin->api->wrapper( 'Relationship', 'get', [
 				'contact_id_a' => $contact_id,
 				'contact_id_b' => $contact_id,
 				'relationship_type_id' => $processor['config']['relationship_type'],

@@ -211,7 +211,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			// handle contact image url
 			if ( ! empty( $config['civicrm_contact']['image_URL'] ) && ! empty( $form_values['civicrm_contact']['image_URL'] ) ) {
 				try {
-					$file = civicrm_api3( 'File', 'getsingle', [ 'id' => $form_values['civicrm_contact']['image_URL'] ] );
+					$file = $this->plugin->api->wrapper( 'File', 'getsingle', [ 'id' => $form_values['civicrm_contact']['image_URL'] ] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 
 				}
@@ -248,7 +248,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( ! $return ) {
 
 				try {
-					$create_contact = civicrm_api3( 'Contact', 'create', $form_values['civicrm_contact'] );
+					$create_contact = $this->plugin->api->wrapper( 'Contact', 'create', $form_values['civicrm_contact'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -271,7 +271,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 							} else {
 								$api_params['id'] = $contact['email_id'];
 							}
-							$new_email = civicrm_api3( 'Email', 'create', $api_params );
+							$new_email = $this->plugin->api->wrapper( 'Email', 'create', $api_params );
 						} catch ( CiviCRM_API3_Exception $e ) {
 							$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 							return [ 'note' => $error, 'type' => 'error' ];
@@ -287,7 +287,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 				$domain_group_id = $this->plugin->helper->get_civicrm_settings( 'domain_group_id' );
 				if( $domain_group_id ){
 					try {
-						$group_contact = civicrm_api3( 'GroupContact', 'create', [
+						$group_contact = $this->plugin->api->wrapper( 'GroupContact', 'create', [
 							'sequential' => 1,
 							'group_id' => $domain_group_id,
 							'contact_id' => $create_contact['id'],
@@ -335,7 +335,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 		if ( ! empty( $transient->contacts->{$this->contact_link} ) ) {
 
 			try {
-				$address = civicrm_api3( 'Address', 'getsingle', [
+				$address = $this->plugin->api->wrapper( 'Address', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['civicrm_address']['location_type_id'],
@@ -369,7 +369,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 				}
 
 				try {
-					$create_address = civicrm_api3( 'Address', 'create', $form_values['civicrm_address'] );
+					$create_address = $this->plugin->api->wrapper( 'Address', 'create', $form_values['civicrm_address'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -393,7 +393,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 			try {
 
-				$phone = civicrm_api3( 'Phone', 'getsingle', [
+				$phone = $this->plugin->api->wrapper( 'Phone', 'getsingle', [
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['civicrm_phone']['location_type_id'],
 					'phone_type_id' => $config['civicrm_phone']['phone_type_id'],
@@ -417,7 +417,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 				if ( ! empty( $form_values['civicrm_phone']['phone'] ) && strlen( $form_values['civicrm_phone']['phone'] ) > 4 ) {
 					try {
-						$create_phone = civicrm_api3( 'Phone', 'create', $form_values['civicrm_phone'] );
+						$create_phone = $this->plugin->api->wrapper( 'Phone', 'create', $form_values['civicrm_phone'] );
 					} catch ( CiviCRM_API3_Exception $e ) {
 						$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 						return [ 'note' => $error, 'type' => 'error' ];
@@ -448,7 +448,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 				// Add Note to contact
 				try {
-					$note = civicrm_api3( 'Note', 'create', $form_values['civicrm_note'] );
+					$note = $this->plugin->api->wrapper( 'Note', 'create', $form_values['civicrm_note'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -472,7 +472,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 			try {
 
-				$email = civicrm_api3( 'Email', 'getsingle', [
+				$email = $this->plugin->api->wrapper( 'Email', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['civicrm_email']['location_type_id'],
@@ -496,7 +496,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 				}
 
 				try {
-					$create_email = civicrm_api3( 'Email', 'create', $form_values['civicrm_email'] );
+					$create_email = $this->plugin->api->wrapper( 'Email', 'create', $form_values['civicrm_email'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -520,7 +520,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 			try {
 
-				$website = civicrm_api3( 'Website', 'getsingle', [
+				$website = $this->plugin->api->wrapper( 'Website', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'website_type_id' => $config['civicrm_website']['website_type_id'],
@@ -544,7 +544,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 				}
 
 				try {
-					$create_email = civicrm_api3( 'Website', 'create', $form_values['civicrm_website'] );
+					$create_email = $this->plugin->api->wrapper( 'Website', 'create', $form_values['civicrm_website'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -568,7 +568,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 			try {
 
-				$im = civicrm_api3( 'Im', 'getsingle', [
+				$im = $this->plugin->api->wrapper( 'Im', 'getsingle', [
 					'sequential' => 1,
 					'contact_id' => $transient->contacts->{$this->contact_link},
 					'location_type_id' => $config['civicrm_im']['location_type_id'],
@@ -592,7 +592,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 				}
 
 				try {
-					$create_im = civicrm_api3( 'Im', 'create', $form_values['civicrm_im'] );
+					$create_im = $this->plugin->api->wrapper( 'Im', 'create', $form_values['civicrm_im'] );
 				} catch ( CiviCRM_API3_Exception $e ) {
 					$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 					return [ 'note' => $error, 'type' => 'error' ];
@@ -614,7 +614,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 
 		if ( ! empty( $transient->contacts->{$this->contact_link} ) ) {
 			try {
-				$result = civicrm_api3( 'GroupContact', 'create', [
+				$result = $this->plugin->api->wrapper( 'GroupContact', 'create', [
 					'sequential' => 1,
 					'group_id' => $config['civicrm_group']['contact_group'], // Group ID from processor config
 					'contact_id' => $transient->contacts->{$this->contact_link}, // Contact ID set in Contact Processor
@@ -642,7 +642,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			foreach ( $config['civicrm_tag'] as $key => $value ) {
 				if ( stristr( $key, 'entity_tag' ) != false ) {
 					try {
-						$tag = civicrm_api3( 'Tag', 'getsingle', [
+						$tag = $this->plugin->api->wrapper( 'Tag', 'getsingle', [
 							'sequential' => 1,
 							'id' => $value,
 							'api.EntityTag.create' => [
@@ -807,7 +807,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 	    $relationships =&  static::$relationships[$relationshipTypeId . ':' . $contactId];
 
 	    if( !isset( $relationships ) ) {
-		    $relationships = civicrm_api3( 'Relationship', 'get', [
+		    $relationships = $this->plugin->api->wrapper( 'Relationship', 'get', [
 			    'sequential'           => 1,
 			    'contact_id_a'         => $contactId,
 			    'contact_id_b'         => $contactId,
@@ -844,7 +844,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( isset( $transient->contacts->{$pr_id['contact_link']} ) ) {
 				try {
 
-					$contact_address = civicrm_api3( 'Address', 'getsingle', [
+					$contact_address = $this->plugin->api->wrapper( 'Address', 'getsingle', [
 						'sequential' => 1,
 						'contact_id' => $transient->contacts->{$pr_id['contact_link']},
 						'location_type_id' => $pr_id['config']['civicrm_address']['location_type_id'],
@@ -887,7 +887,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( isset( $transient->contacts->{$pr_id['contact_link']} ) ) {
 				try {
 
-					$contact_phone = civicrm_api3( 'Phone', 'getsingle', [
+					$contact_phone = $this->plugin->api->wrapper( 'Phone', 'getsingle', [
 						'sequential' => 1,
 						'contact_id' => $transient->contacts->{$pr_id['contact_link']},
 						'location_type_id' => $pr_id['config']['civicrm_phone']['location_type_id'],
@@ -930,7 +930,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( isset( $transient->contacts->{$pr_id['contact_link']} ) ) {
 				try {
 
-					$contact_email = civicrm_api3( 'Email', 'getsingle', [
+					$contact_email = $this->plugin->api->wrapper( 'Email', 'getsingle', [
 						'sequential' => 1,
 						'contact_id' => $transient->contacts->{$pr_id['contact_link']},
 						'location_type_id' => $pr_id['config']['civicrm_email']['location_type_id'],
@@ -972,7 +972,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( isset( $transient->contacts->{$pr_id['contact_link']} ) ) {
 				try {
 
-					$contact_website = civicrm_api3( 'Website', 'getsingle', [
+					$contact_website = $this->plugin->api->wrapper( 'Website', 'getsingle', [
 						'sequential' => 1,
 						'contact_id' => $transient->contacts->{$pr_id['contact_link']},
 						'website_type_id' => $pr_id['config']['civicrm_website']['website_type_id'],
@@ -1014,7 +1014,7 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 			if ( isset( $transient->contacts->{$pr_id['contact_link']} ) ) {
 				try {
 
-					$contact_im = civicrm_api3( 'Im', 'getsingle', [
+					$contact_im = $this->plugin->api->wrapper( 'Im', 'getsingle', [
 						'sequential' => 1,
 						'contact_id' => $transient->contacts->{$pr_id['contact_link']},
 						'location_type_id' => $pr_id['config']['civicrm_im']['location_type_id'],

@@ -87,7 +87,7 @@ class CiviCRM_Caldera_Forms_Entity_Tag_Processor {
 		foreach ( $config as $key => $value ) {
 			if ( stristr( $key, 'entity_tag' ) != false ) {
 				try {
-					$tag = civicrm_api3( 'Tag', 'getsingle', [
+					$tag = $this->plugin->api->wrapper( 'Tag', 'getsingle', [
 						'sequential' => 1,
 						'id' => $value,
 						'api.EntityTag.create' => [

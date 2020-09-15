@@ -1,6 +1,6 @@
 <?php
 
-$messageTemplates = civicrm_api3( 'MessageTemplate', 'get', [
+$messageTemplates = CiviCRM_Caldera_Forms::instance()->api->wrapper( 'MessageTemplate', 'get', [
 	'sequential' => 1,
 	'return' => [ 'id', 'msg_title', 'msg_subject' ],
 	'workflow_id' => [ 'IS NULL' => 1 ],

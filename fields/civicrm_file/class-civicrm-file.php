@@ -110,14 +110,14 @@ class CiviCRM_Caldera_Forms_Field_File {
 		// this triggers more than once per form
 		if ( empty( $this->file_fields[$args['field_id']]['files'] ) ) {
 			// create and add file to array
-			$create_file = civicrm_api3( 'File', 'create', $params );
+			$create_file = $this->plugin->api->wrapper( 'File', 'create', $params );
 			$this->file_fields[$args['field_id']]['files'][$create_file['id']] = $file;
 
 		} else {
 			// check if file is already added
 			foreach ( $this->file_fields[$args['field_id']]['files'] as $file_id => $file_parts ) {
 				if ( $file_parts !==  $file ) {
-					$create_file = civicrm_api3( 'File', 'create', $params );
+					$create_file = $this->plugin->api->wrapper( 'File', 'create', $params );
 					$this->file_fields[$args['field_id']]['files'][$create_file['id']] = $file;
 				}
 			}

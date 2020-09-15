@@ -122,7 +122,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 
 		$params = array_merge( $params, $search );
 
-		$contacts = civicrm_api3( 'Contact', 'get', $params );
+		$contacts = $this->plugin->api->wrapper( 'Contact', 'get', $params );
 
 		foreach ( $contacts['values'] as $key => $contact ) {
 			$sort_name = $with_email ? $contact['sort_name'] . ' :: ' . $contact['email'] : $contact['sort_name'];
@@ -148,7 +148,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 		if ( isset( $group_id ) ) $params['id'] = $group_id;
 		if ( isset( $search_term ) && ! empty( $search_term ) ) $params['title'] = [ 'LIKE' => '%' . $search_term . '%' ];
 
-		$groups = civicrm_api3( 'Group', 'get', $params );
+		$groups = $this->plugin->api->wrapper( 'Group', 'get', $params );
 
 		echo json_encode( $groups['values'] );
 		die;
@@ -208,7 +208,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 		if ( isset( $premium_id ) ) $params['id'] = $premium_id;
 		if ( isset( $search_term ) && ! empty( $search_term ) ) $params['name'] = [ 'LIKE' => '%' . $search_term . '%' ];
 
-		$premiums = civicrm_api3( 'Product', 'get', $params );
+		$premiums = $this->plugin->api->wrapper( 'Product', 'get', $params );
 
 		echo json_encode( $premiums['values'] );
 		die;
