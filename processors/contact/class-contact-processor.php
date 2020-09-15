@@ -262,11 +262,16 @@ class CiviCRM_Caldera_Forms_Contact_Processor {
 					// update if email has changed
 					if ( $contact['email'] != $form_values['civicrm_contact']['email'] ) {
 						try {
-							$new_email = civicrm_api3( 'Email', 'create', [
-								'id' => $contact['email_id'],
+							$api_params = [
 								'email' => $form_values['civicrm_contact']['email'],
 								'is_primary' => 1,
-							] );
+							];
+							if (empty($contact['email_id'])) {
+								$api_params['contact_id'] = $form_values['civicrm_contact']['contact_id'];
+							} else {
+								$api_params['id'] = $contact['email_id'];
+							}
+							$new_email = civicrm_api3( 'Email', 'create', $api_params );
 						} catch ( CiviCRM_API3_Exception $e ) {
 							$error = $e->getMessage() . '<br><br><pre>' . $e->getTraceAsString() . '</pre>';
 							return [ 'note' => $error, 'type' => 'error' ];
