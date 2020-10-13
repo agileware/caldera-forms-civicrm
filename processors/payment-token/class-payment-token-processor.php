@@ -160,10 +160,10 @@ class CiviCRM_Caldera_forms_Payment_Token_Processor {
 			// Pass magic tags value
 			$token = array_shift( $result['values'] );
 
-			return [
-				'token_id' => $token['id'],
-				'token'    => $token['token'],
-			];
+			// using set_submission_meta cannot override the value but will append new value to the array
+			global $processed_meta;
+			$processed_meta[$form['ID']][$config['processor_id']]['token_id'] = [$token['id']];
+			$processed_meta[$form['ID']][$config['processor_id']]['token'] = [$token['token']];
 		} catch ( CiviCRM_API3_Exception $e ) {
 			CRM_Core_Error::debug_log_message($e->getMessage());
 		}
