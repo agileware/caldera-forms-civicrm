@@ -103,6 +103,13 @@ $price_sets = caldera_forms_civicrm()->helper->cached_price_sets();
 		<p><?php _e( 'Use this field for Other Amount', 'cf-civicrm');?></p>
 		</div>
 	</div>
+    <div id="{{_id}}_tax" class="caldera-config-group">
+        <label><?php _e( 'Tax Amount', 'cf-civicrm' );?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[tax]" value="{{tax}}">
+            <p><?php _e( 'Use this field for Tax Amount. If this field is used, this tax amount will be added to the amount above.', 'cf-civicrm');?></p>
+        </div>
+    </div>
 </div>
 
 <script>

@@ -154,6 +154,9 @@ class CiviCRM_Caldera_Forms_Line_Item_Processor {
 		if ( isset( $config['is_other_amount'] ) ) {
 			$form_values = $this->plugin->helper->map_fields_to_processor( $config, $form, $form_values );
 			$price_field_value[0]['line_total'] = $price_field_value[0]['unit_price'] = $price_field_value[0]['amount'] = $form_values['amount'];
+			if ($form_values['tax']) {
+				$price_field_value[0]['tax_amount'] = $form_values['tax'];
+			}
 		}
 
 		// membership params aka 'params'
