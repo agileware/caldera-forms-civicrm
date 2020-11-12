@@ -324,7 +324,8 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		do_action( 'cfc_order_post_processor', $this->order, $config, $form, $processid );
 
 		// send confirmation/receipt
-		$this->maybe_send_confirmation( $this->order, $config );
+		$form_values = $this->plugin->helper->map_fields_to_processor( $config, $form, $form_values );
+		$this->maybe_send_confirmation( $this->order, $config, $form_values );
 
 	}
 
@@ -802,18 +803,42 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	 * @param array $order The Order api result
 	 * @param array $config Processor config
 	 */
-	public function maybe_send_confirmation( $order, $config ) {
+	public function maybe_send_confirmation( $order, $config, $form_values ) {
+		if ( ! $order || !isset( $order['id'] ) || !isset( $config['is_email_receipt'] ) ) {
+			return;
+		}
+		$values = $form_values + $config;
+		$params = [
+			'id' => $order['id']
+		];
+		if (!empty($values['receipt_from_email'])) {
+			$params['receipt_from_email'] = $values['receipt_from_email'];
+		}
+		if (!empty($values['receipt_from_name'])) {
+			$params['receipt_from_name'] = $values['receipt_from_name'];
+		}
+		if (!empty($values['receipt_update'])) {
+			$params['receipt_update'] = $values['receipt_update'];
+		}
+		if (!empty($values['cc_receipt'])) {
+			$params['cc_receipt'] = $values['cc_receipt'];
+		}
+		if (!empty($values['bcc_receipt'])) {
+			$params['bcc_receipt'] = $values['bcc_receipt'];
+		}
+		if (!empty($values['receipt_text'])) {
+			$params['receipt_text'] = $values['receipt_text'];
+		}
+		if (!empty($values['payment_processor_id'])) {
+			$params['payment_processor_id'] = $values['payment_processor_id'];
+		}
 
-		if ( ! $order ) return;
-
-		if ( isset( $order['id'] ) && isset( $config['is_email_receipt'] ) ) {
 			try {
-				civicrm_api3( 'Contribution', 'sendconfirmation', [ 'id' => $order['id'] ] );
+			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $params );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
 			}
 		}
-	}
 
 	/**
 	 * Get OptionValue by label.

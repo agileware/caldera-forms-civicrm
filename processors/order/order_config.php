@@ -60,7 +60,8 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			<?php } ?>
 			</select>
 		</div>
-
+    </div>
+    <div id="{{_id}}_payment_processor" class="is_email_receipt_options caldera-config-group">
 		<!-- Payment Processor -->
 		<label><?php _e( 'Payment Processor', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
@@ -72,6 +73,36 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			</select>
 		</div>
 	</div>
+    <div class="is_email_receipt_options caldera-config-group">
+        <label><?php _e( 'From Email', 'cf-civicrm' ); ?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_email]" value="{{receipt_from_email}}">
+        </div>
+    </div>
+    <div class="is_email_receipt_options caldera-config-group">
+        <label><?php _e( 'From Name', 'cf-civicrm' ); ?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_name]" value="{{receipt_from_name}}">
+        </div>
+    </div>
+    <div class="is_email_receipt_options caldera-config-group">
+        <label><?php _e( 'CC', 'cf-civicrm' ); ?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[cc_receipt]" value="{{cc_receipt}}">
+        </div>
+    </div>
+    <div class="is_email_receipt_options caldera-config-group">
+        <label><?php _e( 'BCC', 'cf-civicrm' ); ?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[bcc_receipt]" value="{{bcc_receipt}}">
+        </div>
+    </div>
+    <div class="is_email_receipt_options caldera-config-group">
+        <label><?php _e( 'Message', 'cf-civicrm' ); ?></label>
+        <div class="caldera-config-field">
+            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}">
+        </div>
+    </div>
 </div>
 
 <!-- Thank you -->
