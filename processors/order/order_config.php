@@ -43,15 +43,26 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 <p class="description"><?php sprintf( _e( '<strong>Note:</strong> This processor does not process payment transactions on its own, it just creates a Contribution in CiviCRM with single or multiple line items. In order to process live payment transaction, a Caldera Forms <a href="https://calderaforms.com/caldera-forms-add-ons/#/payment" target="_blank">add-on</a> is needed. Currently this processor intergrates with Caldera Forms\'s Stripe, PayPal, and Authorize.net add-ons for <strong>single/one-off</strong> payments, and Agileware\'s Eway Rapid add-on for <strong>single/one-off</strong> and <strong>recurring</strong> payments.', 'cf-civicrm' ) ); ?></p>
 <hr style="clear: both;" />
 
+<!-- Contact ID -->
+<h2><?php _e( 'Contact Link', 'cf-civicrm' ); ?></h2>
+<div id="{{_id}}_contact_link" class="caldera-config-group">
+	<label><?php _e( 'Link to', 'cf-civicrm' ); ?></label>
+	<div class="caldera-config-field">
+		<?php caldera_forms_civicrm()->helper->contact_link_field(); ?>
+		<p><?php _e( 'Select which contact you want to link this processor to.', 'cf-civicrm' ); ?></p>
+	</div>
+</div>
+<hr style="clear: both;" />
+
 <!-- Email receipt -->
 <div id="{{_id}}_is_email_receipt" class="caldera-config-group caldera-config-group-full">
 	<div class="caldera-config-field">
 		<label><input type="checkbox" name="{{_name}}[is_email_receipt]" value="1" {{#if is_email_receipt}}checked="checked"{{/if}}><?php _e( 'Email receipt.', 'cf-civicrm' ); ?></label>
 	</div>
 	<!-- Contribution page -->
-	<div class="is_email_receipt_options caldera-config-group">
-		<p class="description"><?php sprintf( _e( 'Reciepts are generated from CiviCRM. CiviCRM relies on the Contribution page and Payment processor (among other entities) to <strong>fill</strong> the data in the receipt, those settings are optional, but please set those if you want <em>better</em> reciepts.', 'cf-civicrm' ) ); ?></p>
-        <p class="description"><?php sprintf( _e( 'When sending the receipt, it will use the template named <strong>contribution receipt on-line</strong>, or <strong>membership receipt on-line</strong> if one of the line item contains membership.', 'cf-civicrm' ) ); ?></p>
+	<div id="is_email_receipt_contribution_page" class="is_email_receipt_options caldera-config-group">
+		<p class="description"><?php sprintf( _e( 'Receipts are generated from CiviCRM. You can ues either a pre-configurated contribution page or directly set the settings from this processor.', 'cf-civicrm' ) ); ?></p>
+		<p class="description"><?php sprintf( _e( 'When sending the receipt, it will use the template named <strong>contribution receipt on-line</strong>, or <strong>membership receipt on-line</strong> if one of the line item contains membership.', 'cf-civicrm' ) ); ?></p>
 		<label><?php _e( 'Contribution Page', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
 			<select class="block-input field-config" name="{{_name}}[contribution_page_id]">
@@ -66,44 +77,45 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		<!-- Payment Processor -->
 		<label><?php _e( 'Payment Processor', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
-			<select class="block-input field-config" name="{{_name}}[payment_processor]">
+			<select class="block-input field-config required" name="{{_name}}[payment_processor]">
 				<option value=""></option>
 			<?php foreach ( $payment_processor['values'] as $key => $processor ) { ?>
 				<option value="<?php echo esc_attr( $processor['id'] ); ?>" {{#is payment_processor value=<?php echo $processor['id']; ?>}}selected="selected"{{/is}}><?php echo esc_html( $processor['name'] ); ?></option>
 			<?php } ?>
 			</select>
 		</div>
+		<p class="description"><?php sprintf( _e( 'Setting the payment processor to avoid randomly guess by the program.', 'cf-civicrm' ) ); ?></p>
 	</div>
-    <div class="is_email_receipt_options caldera-config-group">
-        <label><?php _e( 'From Email', 'cf-civicrm' ); ?></label>
-        <div class="caldera-config-field">
-            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_email]" value="{{receipt_from_email}}">
-        </div>
-    </div>
-    <div class="is_email_receipt_options caldera-config-group">
-        <label><?php _e( 'From Name', 'cf-civicrm' ); ?></label>
-        <div class="caldera-config-field">
-            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_name]" value="{{receipt_from_name}}">
-        </div>
-    </div>
-    <div class="is_email_receipt_options caldera-config-group">
-        <label><?php _e( 'CC', 'cf-civicrm' ); ?></label>
-        <div class="caldera-config-field">
-            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[cc_receipt]" value="{{cc_receipt}}">
-        </div>
-    </div>
-    <div class="is_email_receipt_options caldera-config-group">
-        <label><?php _e( 'BCC', 'cf-civicrm' ); ?></label>
-        <div class="caldera-config-field">
-            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[bcc_receipt]" value="{{bcc_receipt}}">
-        </div>
-    </div>
-    <div class="is_email_receipt_options caldera-config-group">
-        <label><?php _e( 'Message', 'cf-civicrm' ); ?></label>
-        <div class="caldera-config-field">
-            <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}">
-        </div>
-    </div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'From Email', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_email]" value="{{receipt_from_email}}">
+		</div>
+	</div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'From Name', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_from_name]" value="{{receipt_from_name}}">
+		</div>
+	</div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'CC', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[cc_receipt]" value="{{cc_receipt}}">
+		</div>
+	</div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'BCC', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[bcc_receipt]" value="{{bcc_receipt}}">
+		</div>
+	</div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'Message', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}">
+		</div>
+	</div>
 </div>
 
 <!-- Thank you -->
@@ -113,17 +125,6 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		<p class="description"><?php sprintf( _e( 'Display Thank you template after submission.', 'cf-civicrm' ) ); ?></p>
 	</div>
 </div> -->
-<hr style="clear: both;" />
-
-<!-- Contact ID -->
-<h2><?php _e( 'Contact Link', 'cf-civicrm' ); ?></h2>
-<div id="{{_id}}_contact_link" class="caldera-config-group">
-	<label><?php _e( 'Link to', 'cf-civicrm' ); ?></label>
-	<div class="caldera-config-field">
-		<?php caldera_forms_civicrm()->helper->contact_link_field(); ?>
-		<p><?php _e( 'Select which contact you want to link this processor to.', 'cf-civicrm' ); ?></p>
-	</div>
-</div>
 <hr style="clear: both;" />
 
 <!-- Order Fields -->
@@ -308,7 +309,8 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		var prId = '{{_id}}',
 		payment_instrument_id = '#' + prId + '_payment_instrument_id',
 		is_email_receipt = '#' + prId + '_is_email_receipt';
-    var is_email_receipt_checkbox = $(is_email_receipt + " input[type='checkbox']");
+	var is_email_receipt_checkbox = $(is_email_receipt + " input[type='checkbox']"),
+	payment_processor = '#' + prId + '_payment_processor';
 
 		$( payment_instrument_id + ' .is_mapped_field input' ).on( 'change', function( i, el ) {
 			var is_mapped_field = $( this ).prop( 'checked' );
@@ -317,10 +319,14 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		} ).trigger( 'change' );
 
 		$( is_email_receipt + ' input' ).on( 'change', function( i, el ) {
-      var is_checked = $( is_email_receipt_checkbox ).prop( 'checked' );
+			var is_checked = $( is_email_receipt_checkbox ).prop( 'checked' );
 			$( '.is_email_receipt_options', $( is_email_receipt ) ).toggle( is_checked );
 		} ).trigger( 'change' );
-
+		$( '#is_email_receipt_contribution_page select' ).on( 'change', function( i, el ) {
+			var is_page = $(this).val();
+			$( '.is_email_receipt_options_non_contribution_page', $( is_email_receipt ) ).toggle( !is_page );
+			$( payment_processor, $( is_email_receipt ) ).toggle( is_page );
+		} ).trigger( 'change' );
 	} );
 
 	function cfc_add_line_item( obj ) {
