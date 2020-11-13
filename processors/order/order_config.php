@@ -321,6 +321,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		$( is_email_receipt + ' input' ).on( 'change', function( i, el ) {
 			var is_checked = $( is_email_receipt_checkbox ).prop( 'checked' );
 			$( '.is_email_receipt_options', $( is_email_receipt ) ).toggle( is_checked );
+			$( '#is_email_receipt_contribution_page select' ).trigger('change');
 		} ).trigger( 'change' );
 		$( '#is_email_receipt_contribution_page select' ).on( 'change', function( i, el ) {
 			var is_page = $(this).val() != 0;
