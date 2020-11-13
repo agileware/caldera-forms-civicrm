@@ -307,6 +307,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		var prId = '{{_id}}',
 		payment_instrument_id = '#' + prId + '_payment_instrument_id',
 		is_email_receipt = '#' + prId + '_is_email_receipt';
+    var is_email_receipt_checkbox = $(is_email_receipt + " input[type='checkbox']");
 
 		$( payment_instrument_id + ' .is_mapped_field input' ).on( 'change', function( i, el ) {
 			var is_mapped_field = $( this ).prop( 'checked' );
@@ -315,7 +316,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		} ).trigger( 'change' );
 
 		$( is_email_receipt + ' input' ).on( 'change', function( i, el ) {
-			var is_checked = $( this ).prop( 'checked' );
+      var is_checked = $( is_email_receipt_checkbox ).prop( 'checked' );
 			$( '.is_email_receipt_options', $( is_email_receipt ) ).toggle( is_checked );
 		} ).trigger( 'change' );
 
