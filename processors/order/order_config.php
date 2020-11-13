@@ -51,6 +51,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 	<!-- Contribution page -->
 	<div class="is_email_receipt_options caldera-config-group">
 		<p class="description"><?php sprintf( _e( 'Reciepts are generated from CiviCRM. CiviCRM relies on the Contribution page and Payment processor (among other entities) to <strong>fill</strong> the data in the receipt, those settings are optional, but please set those if you want <em>better</em> reciepts.', 'cf-civicrm' ) ); ?></p>
+        <p class="description"><?php sprintf( _e( 'When sending the receipt, it will use the template named <strong>contribution receipt on-line</strong>, or <strong>membership receipt on-line</strong> if one of the line item contains membership.', 'cf-civicrm' ) ); ?></p>
 		<label><?php _e( 'Contribution Page', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
 			<select class="block-input field-config" name="{{_name}}[contribution_page_id]">
