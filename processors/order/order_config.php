@@ -323,7 +323,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			$( '.is_email_receipt_options', $( is_email_receipt ) ).toggle( is_checked );
 		} ).trigger( 'change' );
 		$( '#is_email_receipt_contribution_page select' ).on( 'change', function( i, el ) {
-			var is_page = $(this).val();
+			var is_page = $(this).val() != 0;
 			$( '.is_email_receipt_options_non_contribution_page', $( is_email_receipt ) ).toggle( !is_page );
 			$( payment_processor, $( is_email_receipt ) ).toggle( is_page );
 		} ).trigger( 'change' );
