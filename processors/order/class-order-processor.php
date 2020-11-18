@@ -71,6 +71,25 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	public $key_name = 'civicrm_order';
 
 	/**
+	 * Overrides used for mail template.
+	 *
+	 * @since 1.0.5-agileware-12
+	 * @access protected
+	 * @var array $mailing_params Overrides used for mail template.
+	 */
+	protected $mailing_params;
+
+	protected const mailing_keys = [
+		'receipt_from_email' => 1,
+		'receipt_from_name' => 1,
+		'receipt_update' => 1,
+		'cc_receipt' => 1,
+		'bcc_receipt' => 1,
+		'receipt_text' => 1,
+		'payment_processor_id' => 1
+	];
+
+	/**
 	 * Initialises this object.
 	 *
 	 * @since 0.4.4
@@ -811,23 +830,41 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		$values = ( is_array($form_values) ? $form_values : [] ) + $config;
 
 		// Set the confirmation template parameters, limited according to accepted keys.
-		$params = [
+		$this->mailing_params = [
 			'id' => $order['id']
-		] + array_intersect_key( $values, [
-			'receipt_from_email' => 1,
-			'receipt_from_name' => 1,
-			'receipt_update' => 1,
-			'cc_receipt' => 1,
-			'bcc_receipt' => 1,
-			'receipt_text' => 1,
-			'payment_processor_id' => 1
-		] );
+		] + array_intersect_key( array_filter($values), self::mailing_keys );
+
+		Civi::dispatcher()->addListener( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
 
 			try {
-			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $params );
+			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $this->mailing_params );
 			} catch ( CiviCRM_API3_Exception $e ) {
 				Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
 			}
+
+		Civi::dispatcher()->removeListener( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
+	}
+
+	/**
+	 * Callback to add in mail parameters that the sendconfirmation API has ignored.
+	 *
+	 * @since 1.0.5-agileware-12
+	 *
+	 * @param array $params read-write dictionary of parameters used by the mailing system
+	 * @param string $context the context of the mailing being constructed.
+	 */
+	public function alter_mail_params(&$params, $context) {
+		if (
+			( $context == 'messageTemplate' )
+			&& isset( $params['tplParams']['id'] )
+			&& ( $params['tplParams']['id'] == $this->mailing_params['id'] )
+		) {
+			$contribution_id = $params['tplParams']['id'];
+
+			foreach(array_intersect_key($this->mailing_params, self::mailing_keys) as $key => $value){
+				$params[$key] = $value;
+			}
+		}
 		}
 
 	/**
