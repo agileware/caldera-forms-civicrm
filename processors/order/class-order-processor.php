@@ -807,31 +807,21 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		if ( ! $order || !isset( $order['id'] ) || !isset( $config['is_email_receipt'] ) ) {
 			return;
 		}
-		$values = $form_values + $config;
+		// Add $form_values array if present.
+		$values = ( is_array($form_values) ? $form_values : [] ) + $config;
+
+		// Set the confirmation template parameters, limited according to accepted keys.
 		$params = [
 			'id' => $order['id']
-		];
-		if (!empty($values['receipt_from_email'])) {
-			$params['receipt_from_email'] = $values['receipt_from_email'];
-		}
-		if (!empty($values['receipt_from_name'])) {
-			$params['receipt_from_name'] = $values['receipt_from_name'];
-		}
-		if (!empty($values['receipt_update'])) {
-			$params['receipt_update'] = $values['receipt_update'];
-		}
-		if (!empty($values['cc_receipt'])) {
-			$params['cc_receipt'] = $values['cc_receipt'];
-		}
-		if (!empty($values['bcc_receipt'])) {
-			$params['bcc_receipt'] = $values['bcc_receipt'];
-		}
-		if (!empty($values['receipt_text'])) {
-			$params['receipt_text'] = $values['receipt_text'];
-		}
-		if (!empty($values['payment_processor_id'])) {
-			$params['payment_processor_id'] = $values['payment_processor_id'];
-		}
+		] + array_intersect_key( $values, [
+			'receipt_from_email' => 1,
+			'receipt_from_name' => 1,
+			'receipt_update' => 1,
+			'cc_receipt' => 1,
+			'bcc_receipt' => 1,
+			'receipt_text' => 1,
+			'payment_processor_id' => 1
+		] );
 
 			try {
 			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $params );
