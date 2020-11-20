@@ -308,9 +308,9 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 
 		var prId = '{{_id}}',
 		payment_instrument_id = '#' + prId + '_payment_instrument_id',
-		is_email_receipt = '#' + prId + '_is_email_receipt';
-	var is_email_receipt_checkbox = $(is_email_receipt + " input[type='checkbox']"),
-	payment_processor = '#' + prId + '_payment_processor';
+		is_email_receipt = '#' + prId + '_is_email_receipt',
+		is_email_receipt_checkbox = $(is_email_receipt + " input[type='checkbox']"),
+		payment_processor = '#' + prId + '_payment_processor';
 
 		$( payment_instrument_id + ' .is_mapped_field input' ).on( 'change', function( i, el ) {
 			var is_mapped_field = $( this ).prop( 'checked' );
@@ -318,16 +318,6 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			$( '.payment_instrument_id', $( payment_instrument_id ) ).toggle( ! is_mapped_field );
 		} ).trigger( 'change' );
 
-		$( is_email_receipt + ' input' ).on( 'change', function( i, el ) {
-			var is_checked = $( is_email_receipt_checkbox ).prop( 'checked' );
-			$( '.is_email_receipt_options', $( is_email_receipt ) ).toggle( is_checked );
-			$( '#is_email_receipt_contribution_page select' ).trigger('change');
-		} ).trigger( 'change' );
-		$( '#is_email_receipt_contribution_page select' ).on( 'change', function( i, el ) {
-			var is_page = $(this).val() != 0;
-			$( '.is_email_receipt_options_non_contribution_page', $( is_email_receipt ) ).toggle( !is_page );
-			$( payment_processor, $( is_email_receipt ) ).toggle( is_page );
-		} ).trigger( 'change' );
 	} );
 
 	function cfc_add_line_item( obj ) {
