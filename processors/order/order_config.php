@@ -72,19 +72,6 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			<?php } ?>
 			</select>
 		</div>
-    </div>
-    <div id="{{_id}}_payment_processor" class="is_email_receipt_options caldera-config-group">
-		<!-- Payment Processor -->
-		<label><?php _e( 'Payment Processor', 'cf-civicrm' ); ?></label>
-		<div class="caldera-config-field">
-			<select class="block-input field-config required" name="{{_name}}[payment_processor]">
-				<option value=""></option>
-			<?php foreach ( $payment_processor['values'] as $key => $processor ) { ?>
-				<option value="<?php echo esc_attr( $processor['id'] ); ?>" {{#is payment_processor value=<?php echo $processor['id']; ?>}}selected="selected"{{/is}}><?php echo esc_html( $processor['name'] ); ?></option>
-			<?php } ?>
-			</select>
-		</div>
-		<p class="description"><?php sprintf( _e( 'Setting the payment processor to avoid randomly guess by the program.', 'cf-civicrm' ) ); ?></p>
 	</div>
 	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
 		<label><?php _e( 'From Email', 'cf-civicrm' ); ?></label>
@@ -113,8 +100,21 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
 		<label><?php _e( 'Message', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
-			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}">
+			<textarea class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}"></textarea>
 		</div>
+	</div>
+	<div id="{{_id}}_payment_processor" class="is_email_receipt_options caldera-config-group">
+		<!-- Payment Processor -->
+		<label><?php _e( 'Payment Processor', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<select class="block-input field-config required" name="{{_name}}[payment_processor]">
+				<option value=""></option>
+			<?php foreach ( $payment_processor['values'] as $key => $processor ) { ?>
+				<option value="<?php echo esc_attr( $processor['id'] ); ?>" {{#is payment_processor value=<?php echo $processor['id']; ?>}}selected="selected"{{/is}}><?php echo esc_html( $processor['name'] ); ?></option>
+			<?php } ?>
+			</select>
+		</div>
+		<p class="description"><?php sprintf( _e( 'Select the payment processor to prevent a potentially incorrect guess based on contribution page.', 'cf-civicrm' ) ); ?></p>
 	</div>
 </div>
 
