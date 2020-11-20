@@ -295,7 +295,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 
 <script>
 	jQuery( document ).ready( function( $ ) {
-		$( '.cfc-select2' ).cfcSelect2({width: '100%'});
+		(function( cb ){ cb && cb({width: '100%'}) })($( '.cfc-select2' ).cfcSelect2 || $( '.cfc-select2' ).select2);
 
 		setTimeout( function(){
 			$( '.line-item .field-config' ).closest( 'span' ).css( 'width', '80%' );
