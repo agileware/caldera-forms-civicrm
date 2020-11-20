@@ -103,6 +103,12 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 			<textarea class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}"></textarea>
 		</div>
 	</div>
+	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
+		<label><?php _e( 'Message Template ID', 'cf-civicrm' ); ?></label>
+		<div class="caldera-config-field">
+			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[messageTemplateID]" value="{{messageTemplateID}}">
+		</div>
+	</div>
 	<div id="{{_id}}_payment_processor" class="is_email_receipt_options caldera-config-group">
 		<!-- Payment Processor -->
 		<label><?php _e( 'Payment Processor', 'cf-civicrm' ); ?></label>

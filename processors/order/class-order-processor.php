@@ -80,13 +80,14 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	protected $mailing_params;
 
 	protected const mailing_keys = [
-		'receipt_from_email' => 1,
-		'receipt_from_name' => 1,
-		'receipt_update' => 1,
-		'cc_receipt' => 1,
-		'bcc_receipt' => 1,
-		'receipt_text' => 1,
-		'payment_processor_id' => 1
+		//'receipt_from_email' => 1,
+		//'receipt_from_name' => 1,
+		//'receipt_update' => 1,
+		'cc_receipt' => 'cc',
+		'bcc_receipt' => 'bcc',
+		//'receipt_text' => 1,
+		//'payment_processor_id' => 1,
+        'messageTemplateID' => 'messageTemplateID'
 	];
 
 	/**
@@ -834,15 +835,15 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 			'id' => $order['id']
 		] + array_intersect_key( array_filter($values), self::mailing_keys );
 
-		Civi::dispatcher()->addListener( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
+		add_filter( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ], 10, 2 );
 
-			try {
+		try {
 			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $this->mailing_params );
-			} catch ( CiviCRM_API3_Exception $e ) {
-				Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
-			}
+		} catch ( CiviCRM_API3_Exception $e ) {
+			Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
+		}
 
-		Civi::dispatcher()->removeListener( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
+		remove_filter( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
 	}
 
 	/**
@@ -854,6 +855,8 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	 * @param string $context the context of the mailing being constructed.
 	 */
 	public function alter_mail_params(&$params, $context) {
+		Civi::log()->debug('Entering alter_mail_params hook', $params);
+		Civi::log()->debug('mailing_params[]', $this->mailing_params);
 		if (
 			( $context == 'messageTemplate' )
 			&& isset( $params['tplParams']['id'] )
@@ -865,7 +868,8 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 				$params[$key] = $value;
 			}
 		}
-		}
+		Civi::log()->debug('Leaving alter_mail_params hook', $params);
+	}
 
 	/**
 	 * Get OptionValue by label.
