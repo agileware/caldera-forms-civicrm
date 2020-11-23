@@ -855,7 +855,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		try {
 			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $api_params );
 		} catch ( CiviCRM_API3_Exception $e ) {
-			Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
+			Civi::log()->error( 'Unable to send confirmation email for Contribution id ' . $api_params['id'] . ': ' .  $e->getMessage() );
 		}
 
 		remove_filter( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ] );
