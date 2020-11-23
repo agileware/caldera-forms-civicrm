@@ -80,6 +80,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	protected $mailing_params;
 
 	protected const mailing_keys = [
+		'from' => 'from',
 		'cc_receipt' => 'cc',
 		'bcc_receipt' => 'bcc',
 		'messageTemplateID' => 'messageTemplateID',
@@ -788,7 +789,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 					'description' => [ $participant_items[$participant['id']]['label'] ]
 				] );
 			} catch ( CiviCRM_API3_Exception $e ) {
-				Civi::log()->debug( 'Unable to track discount ' . $discount['code'] . ' for contribution id ' . $order['id'] );
+				Civi::log()->error( 'Unable to track discount ' . $discount['code'] . ' for contribution id ' . $order['id'] );
 			}
 
 		}, array_keys( $refs ), $refs );
@@ -838,6 +839,14 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 		foreach ( self::mailing_keys as $key => $mkvalue ) {
 			if ( is_array( $mkvalue ) ) {
 				$this->mailing_params[ $key ] = array_intersect_key( $values, $mkvalue );
+			}
+		}
+
+		if ( !empty( $values[ 'receipt_from_email' ] ) ) {
+			if (!empty( $values[ 'receipt_from_name' ] ) ) {
+				$this->mailing_params[ 'from' ] = "{$values[ 'receipt_from_name' ]} <{$values[ 'receipt_from_email' ] }>";
+			} else {
+				$this->mailing_params[ 'from' ] = $values[ 'receipt_from_email' ];
 			}
 		}
 
