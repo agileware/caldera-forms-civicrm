@@ -80,14 +80,12 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	protected $mailing_params;
 
 	protected const mailing_keys = [
-		//'receipt_from_email' => 1,
-		//'receipt_from_name' => 1,
-		//'receipt_update' => 1,
 		'cc_receipt' => 'cc',
 		'bcc_receipt' => 'bcc',
-		//'receipt_text' => 1,
-		//'payment_processor_id' => 1,
-        'messageTemplateID' => 'messageTemplateID'
+		'messageTemplateID' => 'messageTemplateID',
+		'tplParams' => [
+			'receipt_text' => 'receipt_text',
+		],
 	];
 
 	/**
@@ -828,17 +826,34 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 			return;
 		}
 		// Add $form_values array if present.
-		$values = ( is_array($form_values) ? $form_values : [] ) + $config;
+		$values = array_filter( ( is_array($form_values) ? $form_values : [] ) + $config );
 
 		// Set the confirmation template parameters, limited according to accepted keys.
 		$this->mailing_params = [
 			'id' => $order['id']
-		] + array_intersect_key( array_filter($values), self::mailing_keys );
+		] + array_intersect_key( $values, self::mailing_keys );
+
+		// mailing_keys that are defined as arrays should fill those array values.
+		// Note: this does not support mapping sub-keys.
+		foreach ( self::mailing_keys as $key => $mkvalue ) {
+			if ( is_array( $mkvalue ) ) {
+				$this->mailing_params[ $key ] = array_intersect_key( $values, $mkvalue );
+			}
+		}
+
+		$api_params = [
+			'id' => $order['id']
+		] + array_intersect_key( $values, [
+			'receipt_from_email' => 1,
+			'receipt_from_name' => 1,
+			'receipt_update' => 1,
+			'payment_processor_id' => 1,
+		] );
 
 		add_filter( 'civicrm_alterMailParams', [ $this, 'alter_mail_params' ], 10, 2 );
 
 		try {
-			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $this->mailing_params );
+			$result = civicrm_api3( 'Contribution', 'sendconfirmation', $api_params );
 		} catch ( CiviCRM_API3_Exception $e ) {
 			Civi::log()->debug( 'Unable to send confirmation email for Contribution id ' . $order['id'] );
 		}
@@ -855,20 +870,24 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 	 * @param string $context the context of the mailing being constructed.
 	 */
 	public function alter_mail_params(&$params, $context) {
-		Civi::log()->debug('Entering alter_mail_params hook', $params);
-		Civi::log()->debug('mailing_params[]', $this->mailing_params);
 		if (
-			( $context == 'messageTemplate' )
-			&& isset( $params['tplParams']['id'] )
-			&& ( $params['tplParams']['id'] == $this->mailing_params['id'] )
+			( $context == 'messageTemplate' ) // Only alter in the template build phase,
+			&& isset( $params['tplParams']['contributionID'] ) // with a contribution,
+			&& ( $params['tplParams']['contributionID'] == $this->mailing_params['id'] ) // matching this processor instance.
 		) {
-			$contribution_id = $params['tplParams']['id'];
-
+			// Loop through the mailing params and assign them
 			foreach(array_intersect_key($this->mailing_params, self::mailing_keys) as $key => $value){
-				$params[$key] = $value;
+				if ( $key == 'id' ) {
+					// Don't set the ID, we already have it
+					continue;
+				} elseif ( is_array( self::mailing_keys[ $key ] ) ) {
+					// Special handling for arrays - merge the passed array with the array in the message parameters
+					$params[ $key ] = array_merge( $params[ $key ], $value );
+				} else {
+					$params[ self::mailing_keys[ $key ] ] = $value;
+				}
 			}
 		}
-		Civi::log()->debug('Leaving alter_mail_params hook', $params);
 	}
 
 	/**
