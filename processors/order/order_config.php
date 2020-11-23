@@ -61,8 +61,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 	</div>
 	<!-- Contribution page -->
 	<div id="is_email_receipt_contribution_page" class="is_email_receipt_options caldera-config-group">
-		<p class="description"><?php sprintf( _e( 'Receipts are generated from CiviCRM. You may either use the settings from a CiviCRM Contribution Page or set them in this section.', 'cf-civicrm' ) ); ?></p>
-		<p class="description"><?php sprintf( _e( 'When sending the receipt, it will use the template named <strong>contribution receipt on-line</strong>, or <strong>membership receipt on-line</strong> if one of the line item contains membership.', 'cf-civicrm' ) ); ?></p>
+		<p class="description"><?php sprintf( _e( 'Receipts are generated from CiviCRM. You may either use the settings from a CiviCRM Contribution Page or override them with the following options.', 'cf-civicrm' ) ); ?></p>
 		<label><?php _e( 'Contribution Page', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
 			<select class="block-input field-config" name="{{_name}}[contribution_page_id]">
@@ -108,6 +107,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 		<div class="caldera-config-field">
 			<input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[messageTemplateID]" value="{{messageTemplateID}}">
 		</div>
+		<p class="description"><?php _e( 'Enter the ID of a message template you wish to use to send a receipt. Leave blank to use the default behavior of selecting the <strong>Contribution Receipt (on-line)</strong> or <strong>Membership Receipt (on-line)</strong> template depending on whether a membership is included in the line items.', 'cf-civicrm' ); ?></p>
 	</div>
 	<div id="{{_id}}_payment_processor" class="is_email_receipt_options caldera-config-group">
 		<!-- Payment Processor -->
