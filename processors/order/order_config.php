@@ -99,7 +99,7 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
 		<label><?php _e( 'Message', 'cf-civicrm' ); ?></label>
 		<div class="caldera-config-field">
-			<textarea class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]" value="{{receipt_text}}"></textarea>
+			<textarea class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[receipt_text]">{{receipt_text}}</textarea>
 		</div>
 	</div>
 	<div class="is_email_receipt_options is_email_receipt_options_non_contribution_page caldera-config-group">
