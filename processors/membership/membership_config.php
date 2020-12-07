@@ -45,16 +45,6 @@ $campaigns = civicrm_api3( 'Campaign', 'get', [
 	<div class="caldera-config-field">
 		<label><input class="preserve_join_date" type="checkbox" name="{{_name}}[preserve_join_date]" value="1" {{#if preserve_join_date}}checked="checked"{{/if}}><?php _e( 'Preserve membership join date (Member since) for any oldest membership belonging to Organization.', 'cf-civicrm' ); ?></label>
 	</div>
-	<div class="member_of_contact_id caldera-config-group">
-		<label><?php _e( 'Organization', 'cf-civicrm' ); ?></label>
-		<div class="caldera-config-field">
-			<select id="{{_id}}_member_of_contact_id" class="block-input field-config" style="width: 100%;" nonce="<?php echo wp_create_nonce('admin_get_civi_contact'); ?>" name="{{_name}}[member_of_contact_id]">
-			</select>
-		</div>
-	</div>
-	<div class="is_membership_type caldera-config-group">
-		<input type="checkbox" name="{{_name}}[is_membership_type]" value="1" {{#if is_membership_type}}checked="checked"{{/if}}><?php _e( 'Membership type based.', 'cf-civicrm' ); ?>
-	</div>
 </div>
 
 <?php do_action( 'cfc_membership_processor_config_template_before_link', $element ); ?>
