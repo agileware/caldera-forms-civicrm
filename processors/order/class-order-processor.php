@@ -269,6 +269,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 				'total_amount' => $this->order['total_amount'],
 				'payment_instrument_id' => $config['payment_instrument_id'],
 				'trxn_id' => $config['trxn_id'],
+				'is_send_contribution_notification' => FALSE,
 			];
 
 			civicrm_api3('Payment', 'create', $payment_params);
