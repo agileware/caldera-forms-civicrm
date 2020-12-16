@@ -91,7 +91,13 @@ class CiviCRM_Caldera_Forms_Activity_Processor {
 		$form_values = $this->plugin->helper->map_fields_to_processor( $config, $form, $form_values );
 
 		if( ! empty( $form_values ) ) {
-			$form_values['activity_type_id'] = $config['activity_type_id']; // Activity Type ID
+			// Activity Type ID
+			if ($config['is_mapped_field']) {
+				$form_values['activity_type_id'] = $form_values['mapped_activity_type_id'];
+			} else {
+				$form_values['activity_type_id'] = $config['activity_type_id'];
+			}
+
 			$form_values['status_id'] = $config['status_id']; // Activity Status ID
 			$form_values['campaign_id'] = $config['campaign_id']; // Campaign ID
 			$form_values['source_contact_id'] = $transient->contacts->{$this->contact_link}; // Default to Contact link

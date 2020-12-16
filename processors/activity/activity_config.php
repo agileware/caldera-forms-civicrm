@@ -46,13 +46,19 @@ foreach ( $activityFieldsResult['values'] as $key => $value ) {
 <h2><?php _e( 'Activity', 'cf-civicrm' ); ?></h2>
 <div id="{{_id}}_activity_type_id" class="caldera-config-group">
 	<label><?php _e( 'Activity Type', 'cf-civicrm' ); ?></label>
-	<div class="caldera-config-field">
+	<div class="caldera-config-field activity_type_id">
 		<select class="block-input field-config" name="{{_name}}[activity_type_id]">
 		<?php foreach ( $activities['values'] as $key => $value ) { ?>
 			<option value="<?php echo esc_attr( $value['key'] ); ?>" {{#is activity_type_id value=<?php echo $value['key']; ?>}}selected="selected"{{/is}}><?php echo esc_html( $value['value'] ); ?></option>
 		<?php } ?>
 		</select>
 	</div>
+    <div class="is_mapped_field caldera-config-field">
+        <label><input type="checkbox" name="{{_name}}[is_mapped_field]" value="1" {{#if is_mapped_field}}checked="checked"{{/if}}><?php _e( 'Use Activity Type mapped field.', 'cf-civicrm' ); ?></label>
+    </div>
+    <div class="mapped_activity_type_id caldera-config-field">
+        <input type="text" class="block-input field-config magic-tag-enabled caldera-field-bind" name="{{_name}}[mapped_activity_type_id]" value="{{mapped_activity_type_id}}">
+    </div>
 </div>
 
 <!-- Activity status -->
@@ -123,7 +129,7 @@ foreach ( $activityFieldsResult['values'] as $key => $value ) {
 </div>
 
 <script>
-	jQuery(document).ready( function() {
+	jQuery(document).ready( function($) {
 		var pid_prefix = '#{{_id}}_',
 		select2_fields = [ {
 				field: 'target_contact_id',
@@ -146,6 +152,13 @@ foreach ( $activityFieldsResult['values'] as $key => $value ) {
 		} )
 		.map( function( field ){
 			cfc_select2_defaults( field.selector, field.value );
-		} )
+		} );
+        var prId = '{{_id}}',
+            activity_type_id = '#' + prId + '_activity_type_id';
+        $( activity_type_id + ' .is_mapped_field input' ).on( 'change', function( i, el ) {
+        var is_mapped_field = $( this ).prop( 'checked' );
+        $( '.mapped_activity_type_id', $( activity_type_id ) ).toggle( is_mapped_field );
+        $( '.activity_type_id', $( activity_type_id ) ).toggle( ! is_mapped_field );
+        } ).trigger( 'change' );
 	} );
 </script>
