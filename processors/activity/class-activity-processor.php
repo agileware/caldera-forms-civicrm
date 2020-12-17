@@ -102,9 +102,31 @@ class CiviCRM_Caldera_Forms_Activity_Processor {
 			$form_values['campaign_id'] = $config['campaign_id']; // Campaign ID
 			$form_values['source_contact_id'] = $transient->contacts->{$this->contact_link}; // Default to Contact link
 
+			// related contacts
 			foreach ( $config as $name => $value ) {
-				if ( in_array( $name, [ 'target_contact_id', 'source_contact_id', 'assignee_contact_id' ] ) && ! empty( $value ) )
-					$form_values[$name] = strpos( $value, 'contact_' ) !== false ? $transient->contacts->{'cid_' . str_replace( 'contact_', '', $value )} : $value;
+				switch ($name) {
+					case 'target_contact_id':
+						if ($config['is_target_mapped_field']) {
+							$form_values[$name] = $form_values['mapped_target_contact_id'];
+						} elseif (!empty($value)) {
+							$form_values[$name] = strpos( $value, 'contact_' ) !== false ? $transient->contacts->{'cid_' . str_replace( 'contact_', '', $value )} : $value;
+						}
+						break;
+					case 'source_contact_id':
+						if ($config['is_source_mapped_field']) {
+							$form_values[$name] = $form_values['mapped_source_contact_id'];
+						} elseif (!empty($value)) {
+							$form_values[$name] = strpos( $value, 'contact_' ) !== false ? $transient->contacts->{'cid_' . str_replace( 'contact_', '', $value )} : $value;
+						}
+						break;
+					case 'assignee_contact_id':
+						if ($config['is_assignee_mapped_field']) {
+							$form_values[$name] = $form_values['mapped_assignee_contact_id'];
+						} elseif (!empty($value)) {
+							$form_values[$name] = strpos( $value, 'contact_' ) !== false ? $transient->contacts->{'cid_' . str_replace( 'contact_', '', $value )} : $value;
+						}
+						break;
+				}
 			}
 
 			// FIXME
