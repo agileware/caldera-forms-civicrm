@@ -656,6 +656,9 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 				// stripe charge object from the successful payment
 				$balance_transaction_id = $transdata['stripe']->balance_transaction;
 
+                if ( !$balance_transaction_id )
+                    return;
+
 				\Stripe\Stripe::setApiKey( $config['secret'] );
 				$balance_transaction_object = \Stripe\BalanceTransaction::retrieve( $balance_transaction_id );
 
