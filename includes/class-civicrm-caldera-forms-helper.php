@@ -283,6 +283,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		if ( isset( $this->states ) ) return $this->states;
 		$params = [
 			'sequential' => 1,
+			'options' => [ 'limit' => 0 ],
 		];
 		if ( is_array( $this->get_civicrm_settings( 'countryLimit' ) ) ) {
 			$params['country_id'] = ['IN' => $this->get_civicrm_settings( 'countryLimit' )];
