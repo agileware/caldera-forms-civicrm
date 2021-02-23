@@ -236,7 +236,7 @@ class CiviCRM_Caldera_Forms_Helper {
 	 */
 	public function get_all_fields() {
 
-		$contact_fields = civicrm_api3( 'Contact', 'getfields', [ 'sequential' => 1, ] );
+		$contact_fields = civicrm_api3( 'Contact', 'getfields', [ 'sequential' => 1, 'options' => [ 'limit' => 0 ]] );
 
 		return $contact_fields['values'];
 
@@ -283,6 +283,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		if ( isset( $this->states ) ) return $this->states;
 		$params = [
 			'sequential' => 1,
+            'options' => [ 'limit' => 0 ],
 		];
 		if ( is_array( $this->get_civicrm_settings( 'countryLimit' ) ) ) {
 			$params['country_id'] = ['IN' => $this->get_civicrm_settings( 'countryLimit' )];
@@ -320,6 +321,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		$settings = civicrm_api3( 'Setting', 'getvalue', [
 			'sequential' => 1,
 			'name' => $setting,
+            'options' => [ 'limit' => 0 ],
 		] );
 
 		return $settings;
@@ -947,6 +949,7 @@ class CiviCRM_Caldera_Forms_Helper {
 		$membership_types = civicrm_api3( 'MembershipType', 'get', [
 		  'return' => ['id'],
 		  'member_of_contact_id' => $cid,
+          'options' => [ 'limit' => 0 ],
 		] );
 
 		if ( ! $membership_types['is_error'] && $membership_types['count'] ) {

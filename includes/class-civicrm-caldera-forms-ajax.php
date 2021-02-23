@@ -118,6 +118,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 			'return' => [ 'sort_name', 'email' ],
 			'is_deleted' => 0,
 			'is_deceased' => 0,
+            'options' => [ 'limit' => 0 ],
 		];
 
 		$params = array_merge( $params, $search );
@@ -143,6 +144,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 			'sequential' => 1,
 			'return' => [ 'id', 'title' ],
 			'is_active' => 1,
+            'options' => [ 'limit' => 0 ],
 		];
 
 		if ( isset( $group_id ) ) $params['id'] = $group_id;
@@ -203,6 +205,7 @@ class CiviCRM_Caldera_Forms_AJAX {
 		$params = [
 			'sequential' => 1,
 			'is_active' => 1,
+            'options' => [ 'limit' => 0 ],
 		];
 
 		if ( isset( $premium_id ) ) $params['id'] = $premium_id;
