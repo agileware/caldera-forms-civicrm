@@ -372,8 +372,8 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 
 			$line_item = $transient->line_items->$item_processor_id->params;
 
-			if ( isset( $line_item['line_item'][0]['tax_amount'] ) && $this->plugin->helper->get_tax_invoicing() )
-				$this->total_tax_amount += $line_item['line_item'][0]['tax_amount'];
+			if ( isset( $line_item['line_item'][0]['tax_rate'] ) && $this->plugin->helper->get_tax_invoicing() )
+				$this->total_tax_amount += ( $line_item['line_item'][0]['tax_amount'] = $this->plugin->helper->calculate_percentage( $line_item['line_item'][0]['line_total'], $line_item['line_item'][0]['tax_rate'] ) );
 
 			// set membership as pending
 			if ( isset( $line_item['params']['membership_type_id'] ) ) {
@@ -481,11 +481,7 @@ class CiviCRM_Caldera_Forms_Order_Processor {
 
 					$fees = array_column( $formatted_items[$item['processor_entity']]['line_item'], 'line_total' );
 
-					$taxes = array_column( $formatted_items[$item['processor_entity']]['line_item'], 'tax_amount' );
-
-					$formatted_items[$item['processor_entity']]['params']['fee_amount'] = ! empty( $taxes )
-						? array_sum( array_merge( $fees, $taxes ) )
-						: array_sum( $fees );
+					$formatted_items[$item['processor_entity']]['params']['fee_amount'] = array_sum( $fees ) + $this->total_tax_amount;
 
 				}
 
